@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400" role="img" aria-label="No image available">
+  <rect width="600" height="400" fill="#E8E4F7"/>
+  <rect x="1" y="1" width="598" height="398" fill="none" stroke="#6B2FA4" stroke-opacity="0.25" stroke-width="2" stroke-dasharray="10 8"/>
+  <g fill="#6B2FA4" opacity="0.55">
+    <circle cx="300" cy="168" r="42"/>
+    <path d="M300 40c-46 0-84 38-84 84 0 72 84 132 84 132s84-60 84-132c0-46-38-84-84-84z" transform="translate(-0 12)"/>
+    <path d="M150 300h300l-52-96h-40l26 44h-168l28-44h-42z" opacity="0.6"/>
+  </g>
+  <text x="300" y="348" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="20" font-weight="600" fill="#6B2FA4">Ayesha Mart</text>
+  <text x="300" y="372" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#6B2FA4" opacity="0.7">No image available</text>
+</svg>

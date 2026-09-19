@@ -100,7 +100,7 @@
                                             <div class="ph-box cart-thumb"><i class="bi bi-image"></i></div>
                                         </c:when>
                                         <c:when test="${item.product.image.startsWith('http')}">
-                                            <img src="<c:out value='${item.product.image}' />" alt="<c:out value='${item.product.name}' />" class="cart-thumb">
+                                            <img src="<c:out value='${item.product.image}' />" alt="<c:out value='${item.product.name}' />" class="cart-thumb" onerror="this.onerror=null;this.src='${ctx}/images/placeholder.svg'">
                                         </c:when>
                                         <c:otherwise>
                                             <img src="${ctx}/<c:out value='${item.product.image}' />" alt="<c:out value='${item.product.name}' />" class="cart-thumb">

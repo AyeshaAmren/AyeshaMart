@@ -5,14 +5,20 @@ import java.io.File;
 /**
  * Resolves the location of the Ayesha Mart data files (Excel/XLSX storage).
  *
- * Location resolution:
- * 1. If the environment variable AYESHA_MART_DATA_DIR is set, data is stored there.
- * 2. Otherwise data is stored under <user.home>/AyeshaMartData/data/
- *    (outside the webapp so redeployments never wipe user data).
+ * Location resolution (first match wins), so no hard-coded machine-specific paths:
+ * 1. Environment variable AYESHA_MART_DATA_DIR
+ * 2. JVM system property ayeshaMart.dataDir (e.g. -DayeshaMart.dataDir=<dir>)
+ * 3. The Tomcat base directory (system property catalina.base) -> <catalina.base>/ayesha-mart-data/data
+ * 4. <user.home>/AyeshaMartData/data
+ *
+ * Data is kept OUTSIDE the webapp, so redeployments never wipe user data.
  */
 public final class DataPathUtil {
 
     public static final String DATA_SUBDIR = "data";
+    public static final String ENV_DATA_DIR = "AYESHA_MART_DATA_DIR";
+    public static final String PROP_DATA_DIR = "ayeshaMart.dataDir";
+    public static final String PROP_CATALINA_BASE = "catalina.base";
 
     private DataPathUtil() {
     }
@@ -21,18 +27,31 @@ public final class DataPathUtil {
      * Returns the base data directory (created if missing).
      */
     public static File getDataDirectory() {
-        String override = System.getenv("AYESHA_MART_DATA_DIR");
-        File base;
-        if (override != null && !override.trim().isEmpty()) {
-            base = new File(override.trim());
-        } else {
-            base = new File(System.getProperty("user.home"), "AyeshaMartData");
-        }
-        File directory = new File(base, DATA_SUBDIR);
+        File directory = new File(resolveBase(), DATA_SUBDIR);
         if (!directory.exists()) {
             directory.mkdirs();
         }
         return directory;
+    }
+
+    private static File resolveBase() {
+        String envOverride = System.getenv(ENV_DATA_DIR);
+        if (isNotBlank(envOverride)) {
+            return new File(envOverride.trim());
+        }
+        String propOverride = System.getProperty(PROP_DATA_DIR);
+        if (isNotBlank(propOverride)) {
+            return new File(propOverride.trim());
+        }
+        String catalinaBase = System.getProperty(PROP_CATALINA_BASE);
+        if (isNotBlank(catalinaBase)) {
+            return new File(catalinaBase.trim(), "ayesha-mart-data");
+        }
+        return new File(System.getProperty("user.home"), "AyeshaMartData");
+    }
+
+    private static boolean isNotBlank(String value) {
+        return value != null && !value.trim().isEmpty();
     }
 
     /**

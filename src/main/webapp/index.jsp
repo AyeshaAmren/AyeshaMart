@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <c:set var="indexDashboardUrl" value="${ctx}/buyer" />
 <c:if test="${sessionScope.authUser.role == 'seller'}">
@@ -32,7 +33,7 @@
                 <a href="${ctx}/products" class="btn btn-accent btn-lg px-4">
                     <i class="bi bi-bag-heart me-2"></i>Start Shopping
                 </a>
-                <a href="register.jsp?role=seller" class="btn btn-outline-light btn-lg px-4">
+                <a href="${ctx}/register?role=seller" class="btn btn-outline-light btn-lg px-4">
                     <i class="bi bi-shop me-2"></i>Start Selling
                 </a>
             </div>
@@ -143,7 +144,7 @@
                     <c:when test="${not empty homeCategories}">
                         <c:forEach var="cat" items="${homeCategories}">
                             <div class="col-6 col-md-4 col-lg-3">
-                                <a href="${ctx}/products?category=${cat}" class="category-chip">
+                                <a href="${ctx}/products?category=${fn:replace(cat, '&', '%26')}" class="category-chip">
                                     <i class="bi bi-bag me-1"></i> <c:out value="${cat}" />
                                 </a>
                             </div>
@@ -212,7 +213,7 @@
                                                 </div>
                                             </c:when>
                                             <c:when test="${p.image.startsWith('http')}">
-                                                <img src="<c:out value='${p.image}' />" alt="<c:out value='${p.name}' />" class="product-thumb-product">
+                                                <img src="<c:out value='${p.image}' />" alt="<c:out value='${p.name}' />" class="product-thumb-product" onerror="this.onerror=null;this.src='${ctx}/images/placeholder.svg'">
                                             </c:when>
                                             <c:otherwise>
                                                 <img src="${ctx}/<c:out value='${p.image}' />" alt="<c:out value='${p.name}' />" class="product-thumb-product">

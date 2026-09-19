@@ -165,7 +165,7 @@
                                                         <span class="seller-thumb"><i class="bi bi-image"></i></span>
                                                     </c:when>
                                                     <c:when test="${p.image.startsWith('http')}">
-                                                        <img src="<c:out value='${p.image}' />" alt="<c:out value='${p.name}' />" class="seller-thumb">
+                                                        <img src="<c:out value='${p.image}' />" alt="<c:out value='${p.name}' />" class="seller-thumb" onerror="this.onerror=null;this.src='${ctx}/images/placeholder.svg'">
                                                     </c:when>
                                                     <c:otherwise>
                                                         <img src="${ctx}/<c:out value='${p.image}' />" alt="<c:out value='${p.name}' />" class="seller-thumb">

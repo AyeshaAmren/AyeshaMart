@@ -5,9 +5,13 @@ session can resume instantly.
 
 ## Tech stack
 - Java 17+ (`maven.compiler.release=17`), Jakarta Servlet 6.0, JSP 3.1, JSTL 3.0.2, Apache POI
-- Storage: Excel (.xlsx) via POI. Data dir = `%AYESHA_MART_DATA_DIR%` if set, else `<user.home>/AyeshaMartData/data/`
+- Storage: Excel (.xlsx) via POI. Data dir resolution (`DataPathUtil`): `%AYESHA_MART_DATA_DIR%`
+  env var -> `ayeshaMart.dataDir` system property -> `CATALINA_BASE/ayesha-mart-data` ->
+  `<user.home>/AyeshaMartData`; files under `<base>/data/`. No hardcoded paths.
 - Tomcat 11.0.5 at `C:\tools\apache-tomcat-11.0.5`, deployed context `/ayesha-mart` (port 8080)
-- Build: `mvn -B package` -> `target/ayesha-mart.war` (avoid `mvn clean`; OneDrive locks `target/maven-status`)
+- Build: `mvn -B package` -> `target/ayesha-mart.war`. `mvn clean` fails locally because
+  OneDrive locks `target/maven-status`; for a clean build, copy the project
+  (`pom.xml` + `src`) to a temp dir, run `mvn -B clean package` there, and copy the WAR back.
 
 ## How to run locally
 1. `mvn -B package`
@@ -56,6 +60,15 @@ session can resume instantly.
   `admin-dashboard.jsp`, `cart.jsp`, `product-details.jsp`, `index.jsp`, `header.jsp`.
   `CatalogSeeder` seeds 32 products (8 categories) + demo seller
   `seller@ayeshamart.com` / `Seller@123` only when the DB is empty.
+- Phase 7 (final integration, security, polish, deployment prep): security audit done
+  (PBKDF2 salted hashes, no plaintext/logging, `requireRole` on every protected servlet,
+  http-only cookie, logout invalidates session, strong server-side validation everywhere);
+  `error.jsp` wired into `web.xml` for 404/500; Bootstrap 5.3.3 + Bootstrap Icons 1.11.3
+  vendored locally under `webapp/vendor/` (no CDN at runtime); branded
+  `images/placeholder.svg` + `onerror` fallback on every product image;
+  cleaned-up nav/footer/breadcrumb links (`${ctx}/...`, filtered category chips, correct
+  `&`-encoding); `DataPathUtil` resolution chain rewritten (env -> system property ->
+  catalina.base -> user.home). Full final test pass green.
 
 ## Business rules already enforced (server-side)
 - Auth: role-based; buyers/sellers/admins see only their dashboards.
@@ -77,12 +90,19 @@ session can resume instantly.
 - `phase5-test.ps1` (49 checks)
 - `phase6-test.ps1` (54 checks) - checkout/orders/payment/delivery/reviews; uses a fresh
   data dir because account emails and order ids (O0001..) are deterministic.
-Run order: phase6 -> phase5 -> phase4 -> phase3. Each suite is single-run against a fresh
-data dir (they mutate shared data); restart Tomcat with a new `AYESHA_MART_DATA_DIR` per run.
+Run order: phase6 -> phase5 -> phase4 -> phase3. phase6/phase5/phase4 are single-run each
+against a FRESH data dir (they mutate shared data); restart Tomcat with a new
+`AYESHA_MART_DATA_DIR` per run. phase3-regression is read-only and depends on the
+`buyer@test.com` / `sellerA@test.com` accounts created by phase4, so it must run against
+the SAME data dir as phase4 (no fresh dir).
+Final Phase 7 pass: phase6 54/54, phase5 49/49, phase4 41/41, phase3 12/12.
 
 ## Known notes / limitations
 - `SessionUtil.dashboardPath()` returns JSP filenames (NOT servlets) because phase3/4/5
   login-redirect checks assert them; the protected JSPs self-redirect to their servlets.
 - EL has no array literals: order-track/admin-orders use `c:forTokens` / `c:choose`.
+- CSRF tokens not implemented (not in scope; would break every POST form + the manual
+  test scripts) and no rate limiting — recommended production hardening.
+- Session cookie is `http-only` but not `secure`/`SameSite`, so deployments must use HTTPS.
 - Legacy sibling folder `Ayesha capstone\` is a copy; only `src\` (active project root) is
   edited.

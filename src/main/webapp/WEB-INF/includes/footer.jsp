@@ -25,7 +25,7 @@
             <div class="col-lg-2 col-md-6 col-6">
                 <h6 class="footer-heading">Quick Links</h6>
                 <ul class="footer-links">
-                    <li><a href="${ctx}/index.jsp">Home</a></li>
+                    <li><a href="${ctx}/home">Home</a></li>
                     <li><a href="${ctx}/products">Products</a></li>
                     <c:choose>
                         <c:when test="${empty sessionScope.authUser}">
@@ -42,10 +42,12 @@
             <div class="col-lg-2 col-md-6 col-6">
                 <h6 class="footer-heading">Categories</h6>
                 <ul class="footer-links">
-                    <li><a href="${ctx}/products">Fashion</a></li>
-                    <li><a href="${ctx}/products">Electronics</a></li>
-                    <li><a href="${ctx}/products">Home &amp; Living</a></li>
-                    <li><a href="${ctx}/products">Beauty</a></li>
+                    <li><a href="${ctx}/products?category=Electronics"><i class="bi bi-phone me-1"></i>Electronics</a></li>
+                    <li><a href="${ctx}/products?category=Fashion"><i class="bi bi-tshirt me-1"></i>Fashion</a></li>
+                    <li><a href="${ctx}/products?category=Home%20%26%20Kitchen"><i class="bi bi-house-heart me-1"></i>Home &amp; Kitchen</a></li>
+                    <li><a href="${ctx}/products?category=Beauty"><i class="bi bi-palette me-1"></i>Beauty</a></li>
+                    <li><a href="${ctx}/products?category=Sports"><i class="bi bi-trophy me-1"></i>Sports</a></li>
+                    <li><a href="${ctx}/products?category=Books"><i class="bi bi-book me-1"></i>Books</a></li>
                 </ul>
             </div>
 
@@ -67,8 +69,8 @@
     </div>
 </footer>
 
-<!-- Bootstrap JS + Ayesha Mart app scripts -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Bootstrap JS + Ayesha Mart app scripts (vendored locally) -->
+<script src="${ctx}/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="${ctx}/js/main.js"></script>
 </body>
 </html>

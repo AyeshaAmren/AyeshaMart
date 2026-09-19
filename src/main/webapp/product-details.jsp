@@ -40,7 +40,7 @@
                             </div>
                         </c:when>
                         <c:when test="${product.image.startsWith('http')}">
-                            <img src="<c:out value='${product.image}' />" alt="<c:out value='${product.name}' />" class="product-thumb-product rounded-3">
+                            <img src="<c:out value='${product.image}' />" alt="<c:out value='${product.name}' />" class="product-thumb-product rounded-3" onerror="this.onerror=null;this.src='${ctx}/images/placeholder.svg'">
                         </c:when>
                         <c:otherwise>
                             <img src="${ctx}/<c:out value='${product.image}' />" alt="<c:out value='${product.name}' />" class="product-thumb-product rounded-3">
