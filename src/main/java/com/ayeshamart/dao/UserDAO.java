@@ -83,6 +83,21 @@ public class UserDAO {
     }
 
     /**
+     * Returns the user with the given userId, or null if not found.
+     */
+    public User findById(String userId) {
+        if (userId == null) {
+            return null;
+        }
+        for (User user : findAll()) {
+            if (userId.equals(user.getUserId())) {
+                return user;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Returns true when a user already exists with the given email (case-insensitive).
      */
     public boolean emailExists(String email) {

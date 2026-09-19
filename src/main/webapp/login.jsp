@@ -1,4 +1,14 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="com.ayeshamart.model.SessionUser" %>
+<%@ page import="com.ayeshamart.util.SessionUtil" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%
+    SessionUser __currentUser = SessionUtil.getCurrentUser(request);
+    if (__currentUser != null) {
+        response.sendRedirect(request.getContextPath() + SessionUtil.dashboardPath(__currentUser.getRole()));
+        return;
+    }
+%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 
 <jsp:include page="/WEB-INF/includes/head.jsp">
@@ -31,12 +41,28 @@
                         </div>
                     </c:if>
 
-                    <form action="#" method="post" id="loginForm" data-validate-form novalidate>
-
-                        <div class="alert alert-info phase-note d-flex align-items-center gap-2 mb-3">
-                            <i class="bi bi-info-circle-fill"></i>
-                            <span>Authentication is integrated in Phase 2. This is the login page layout.</span>
+                    <c:if test="${param.logout == '1'}">
+                        <div class="alert alert-success d-flex align-items-center gap-2 mb-3" role="alert">
+                            <i class="bi bi-box-arrow-right"></i>
+                            <span>You have been logged out successfully.</span>
                         </div>
+                    </c:if>
+
+                    <c:if test="${param.error == 'loginRequired'}">
+                        <div class="alert alert-warning d-flex align-items-center gap-2 mb-3" role="alert">
+                            <i class="bi bi-shield-lock-fill"></i>
+                            <span>Please login to access that page.</span>
+                        </div>
+                    </c:if>
+
+                    <c:if test="${not empty loginError}">
+                        <div class="alert alert-danger d-flex align-items-center gap-2 mb-3" role="alert">
+                            <i class="bi bi-exclamation-triangle-fill"></i>
+                            <span><c:out value="${loginError}" /></span>
+                        </div>
+                    </c:if>
+
+                    <form action="${ctx}/login" method="post" id="loginForm" data-validate-form novalidate>
 
                         <div class="mb-3">
                             <label for="loginEmail" class="form-label">Email address</label>
@@ -44,6 +70,7 @@
                                 <span class="input-group-text"><i class="bi bi-envelope-at"></i></span>
                                 <input type="email" class="form-control" id="loginEmail" name="email"
                                        placeholder="you@example.com" autocomplete="email"
+                                       value='<c:out value="${not empty loginEmail ? loginEmail : registeredEmail}" />'
                                        data-validate="required|email" data-error-email="Enter a valid email address.">
                             </div>
                             <div class="invalid-feedback" id="loginEmail-feedback"></div>
@@ -77,11 +104,11 @@
 
                     <p class="text-center small text-muted mb-0">
                         Don't have an account?
-                        <a href="register.jsp" class="fw-semibold">Create one now</a>
+                        <a href="${ctx}/register" class="fw-semibold">Create one now</a>
                     </p>
                     <p class="text-center small text-muted mt-2 mb-0">
                         Want to open a shop?
-                        <a href="register.jsp?role=seller" class="fw-semibold">Register as a Seller</a>
+                        <a href="${ctx}/register?role=seller" class="fw-semibold">Register as a Seller</a>
                     </p>
                 </div>
 

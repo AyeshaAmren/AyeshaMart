@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 
 <jsp:include page="/WEB-INF/includes/head.jsp">
@@ -15,23 +16,30 @@
         <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
             <div>
                 <p class="section-eyebrow mb-1">Buyer area</p>
-                <h2 class="section-title mb-0">Buyer Dashboard</h2>
+                <h2 class="section-title mb-0">Welcome back, <c:out value="${sessionScope.authUser.name}" /></h2>
                 <p class="section-sub mb-0 mt-1">Manage your shopping experience from one place.</p>
             </div>
-            <a href="products.jsp" class="btn btn-primary">
+            <a href="${ctx}/products" class="btn btn-primary">
                 <i class="bi bi-bag-plus me-1"></i>Browse Products
             </a>
         </div>
 
+        <c:if test="${param.error == 'forbidden'}">
+            <div class="alert alert-warning d-flex align-items-center gap-2 mb-4" role="alert">
+                <i class="bi bi-shield-exclamation"></i>
+                <span>You do not have permission to access that page.</span>
+            </div>
+        </c:if>
+
         <div class="alert alert-info phase-note d-flex align-items-center gap-2 mb-4">
-            <i class="bi bi-info-circle-fill"></i>
-            <span>Login access and live data arrive in Phase 2. These cards preview your buyer dashboard once you sign in.</span>
+            <i class="bi bi-person-check-fill"></i>
+            <span>You are signed in as a buyer. Cart, orders and review data arrive in later phases.</span>
         </div>
 
         <!-- Quick actions -->
         <div class="row g-3 mb-4">
             <div class="col-6 col-md-4 col-lg-2">
-                <a href="products.jsp" class="quick-action"><i class="bi bi-grid"></i>Shop Products</a>
+                <a href="${ctx}/products" class="quick-action"><i class="bi bi-grid"></i>Shop Products</a>
             </div>
             <div class="col-6 col-md-4 col-lg-2">
                 <a href="#" class="quick-action"><i class="bi bi-cart3"></i>My Cart</a>
@@ -103,7 +111,7 @@
                 <i class="bi bi-box-seam"></i>
                 <h6 class="mb-1">No orders yet</h6>
                 <p class="small mb-3">When you place an order, it will show up in this table.</p>
-                <a href="products.jsp" class="btn btn-accent btn-sm">
+                <a href="${ctx}/products" class="btn btn-accent btn-sm">
                     <i class="bi bi-bag-heart me-1"></i>Start Shopping
                 </a>
             </div>

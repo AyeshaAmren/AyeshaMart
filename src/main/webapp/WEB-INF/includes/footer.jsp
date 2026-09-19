@@ -26,19 +26,26 @@
                 <h6 class="footer-heading">Quick Links</h6>
                 <ul class="footer-links">
                     <li><a href="${ctx}/index.jsp">Home</a></li>
-                    <li><a href="${ctx}/products.jsp">Products</a></li>
-                    <li><a href="${ctx}/login.jsp">Login</a></li>
-                    <li><a href="${ctx}/register.jsp">Create Account</a></li>
+                    <li><a href="${ctx}/products">Products</a></li>
+                    <c:choose>
+                        <c:when test="${empty sessionScope.authUser}">
+                            <li><a href="${ctx}/login">Login</a></li>
+                            <li><a href="${ctx}/register">Create Account</a></li>
+                        </c:when>
+                        <c:otherwise>
+                            <li><a href="${ctx}/logout">Logout</a></li>
+                        </c:otherwise>
+                    </c:choose>
                 </ul>
             </div>
 
             <div class="col-lg-2 col-md-6 col-6">
                 <h6 class="footer-heading">Categories</h6>
                 <ul class="footer-links">
-                    <li><a href="${ctx}/products.jsp">Fashion</a></li>
-                    <li><a href="${ctx}/products.jsp">Electronics</a></li>
-                    <li><a href="${ctx}/products.jsp">Home &amp; Living</a></li>
-                    <li><a href="${ctx}/products.jsp">Beauty</a></li>
+                    <li><a href="${ctx}/products">Fashion</a></li>
+                    <li><a href="${ctx}/products">Electronics</a></li>
+                    <li><a href="${ctx}/products">Home &amp; Living</a></li>
+                    <li><a href="${ctx}/products">Beauty</a></li>
                 </ul>
             </div>
 

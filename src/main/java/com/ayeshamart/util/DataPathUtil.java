@@ -41,4 +41,25 @@ public final class DataPathUtil {
     public static File getUsersFile() {
         return new File(getDataDirectory(), "users.xlsx");
     }
+
+    /**
+     * Returns the products.xlsx file used for product storage.
+     */
+    public static File getProductsFile() {
+        return new File(getDataDirectory(), "products.xlsx");
+    }
+
+    /**
+     * Returns the categories.xlsx file used for category storage.
+     */
+    public static File getCategoriesFile() {
+        return new File(getDataDirectory(), "categories.xlsx");
+    }
+
+    /**
+     * Returns the cart-items.xlsx file used for buyer cart storage.
+     */
+    public static File getCartItemsFile() {
+        return new File(getDataDirectory(), "cart-items.xlsx");
+    }
 }

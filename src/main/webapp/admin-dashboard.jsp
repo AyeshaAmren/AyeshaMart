@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 
 <jsp:include page="/WEB-INF/includes/head.jsp">
@@ -15,15 +16,22 @@
         <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
             <div>
                 <p class="section-eyebrow mb-1">Administration</p>
-                <h2 class="section-title mb-0">Admin Dashboard</h2>
+                <h2 class="section-title mb-0">Welcome back, <c:out value="${sessionScope.authUser.name}" /></h2>
                 <p class="section-sub mb-0 mt-1">Oversee users, products, orders, deliveries and payments.</p>
             </div>
             <span class="badge badge-accent py-2 px-3"><i class="bi bi-shield-lock me-1"></i>Admin only</span>
         </div>
 
+        <c:if test="${param.error == 'forbidden'}">
+            <div class="alert alert-warning d-flex align-items-center gap-2 mb-4" role="alert">
+                <i class="bi bi-shield-exclamation"></i>
+                <span>You do not have permission to access that page.</span>
+            </div>
+        </c:if>
+
         <div class="alert alert-info phase-note d-flex align-items-center gap-2 mb-4">
-            <i class="bi bi-info-circle-fill"></i>
-            <span>Admin login and live statistics arrive in Phase 2. This page previews the management console.</span>
+            <i class="bi bi-shield-check"></i>
+            <span>You are signed in as an administrator. Live user, order and revenue statistics arrive in later phases.</span>
         </div>
 
         <!-- Stat cards -->

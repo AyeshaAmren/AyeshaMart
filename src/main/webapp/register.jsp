@@ -1,5 +1,14 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="com.ayeshamart.model.SessionUser" %>
+<%@ page import="com.ayeshamart.util.SessionUtil" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%
+    SessionUser __currentUser = SessionUtil.getCurrentUser(request);
+    if (__currentUser != null) {
+        response.sendRedirect(request.getContextPath() + SessionUtil.dashboardPath(__currentUser.getRole()));
+        return;
+    }
+%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 
 <c:set var="preselectRole" value="${param.role == 'seller' ? 'seller' : 'buyer'}" />
@@ -159,7 +168,7 @@
 
                     <p class="text-center small text-muted mt-4 mb-0">
                         Already have an account?
-                        <a href="login.jsp" class="fw-semibold">Login</a>
+                        <a href="${ctx}/login" class="fw-semibold">Login</a>
                     </p>
                 </div>
             </div>

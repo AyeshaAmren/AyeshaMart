@@ -1,5 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
+<c:set var="indexDashboardUrl" value="${ctx}/buyer-dashboard.jsp" />
+<c:if test="${sessionScope.authUser.role == 'seller'}">
+    <c:set var="indexDashboardUrl" value="${ctx}/seller/products" />
+</c:if>
+<c:if test="${sessionScope.authUser.role == 'admin'}">
+    <c:set var="indexDashboardUrl" value="${ctx}/admin-dashboard.jsp" />
+</c:if>
 
 <jsp:include page="/WEB-INF/includes/head.jsp">
     <jsp:param name="pageTitle" value="Ayesha Mart - Shop, Sell &amp; Manage in One Place" />
@@ -21,7 +29,7 @@
                 Browse a growing catalog, open your own shop, or manage the marketplace - all in one place.
             </p>
             <div class="hero-actions">
-                <a href="products.jsp" class="btn btn-accent btn-lg px-4">
+                <a href="${ctx}/products" class="btn btn-accent btn-lg px-4">
                     <i class="bi bi-bag-heart me-2"></i>Start Shopping
                 </a>
                 <a href="register.jsp?role=seller" class="btn btn-outline-light btn-lg px-4">
@@ -91,7 +99,7 @@
                         <h5 class="role-title">For Buyers</h5>
                         <p class="role-desc">Discover products, add them to your cart, place orders, make payments and track deliveries from your personal dashboard.</p>
                         <div class="role-cta">
-                            <a href="login.jsp" class="btn btn-soft btn-sm w-100">Login to shop <i class="bi bi-arrow-right ms-1"></i></a>
+                            <a href="${ctx}/login" class="btn btn-soft btn-sm w-100">Login to shop <i class="bi bi-arrow-right ms-1"></i></a>
                         </div>
                     </div>
                 </div>
@@ -101,7 +109,7 @@
                         <h5 class="role-title">For Sellers</h5>
                         <p class="role-desc">List products, manage your inventory, track sales and earnings, and grow your shop through the seller panel.</p>
                         <div class="role-cta">
-                            <a href="register.jsp?role=seller" class="btn btn-accent btn-sm w-100">Become a Seller <i class="bi bi-arrow-right ms-1"></i></a>
+                            <a href="${ctx}/register?role=seller" class="btn btn-accent btn-sm w-100">Become a Seller <i class="bi bi-arrow-right ms-1"></i></a>
                         </div>
                     </div>
                 </div>
@@ -111,7 +119,7 @@
                         <h5 class="role-title">For Administrators</h5>
                         <p class="role-desc">Manage users, approve products, oversee orders, deliveries and payments from the central admin dashboard.</p>
                         <div class="role-cta">
-                            <a href="admin-dashboard.jsp" class="btn btn-outline-primary btn-sm w-100">Admin Dashboard <i class="bi bi-arrow-right ms-1"></i></a>
+                            <a href="${ctx}/admin-dashboard.jsp" class="btn btn-outline-primary btn-sm w-100">Admin Dashboard <i class="bi bi-arrow-right ms-1"></i></a>
                         </div>
                     </div>
                 </div>
@@ -127,27 +135,27 @@
                     <p class="section-eyebrow mb-1">Browse by category</p>
                     <h2 class="section-title mb-0">Shop Categories</h2>
                 </div>
-                <a href="products.jsp" class="btn btn-link">View all products <i class="bi bi-arrow-right"></i></a>
+                <a href="${ctx}/products" class="btn btn-link">View all products <i class="bi bi-arrow-right"></i></a>
             </div>
 
             <div class="row g-3">
                 <div class="col-6 col-md-4 col-lg-2">
-                    <a href="products.jsp" class="category-chip"><i class="bi bi-tshirt"></i> Fashion</a>
+                    <a href="${ctx}/products?category=Fashion" class="category-chip"><i class="bi bi-tshirt"></i> Fashion</a>
                 </div>
                 <div class="col-6 col-md-4 col-lg-2">
-                    <a href="products.jsp" class="category-chip"><i class="bi bi-phone"></i> Electronics</a>
+                    <a href="${ctx}/products?category=Electronics" class="category-chip"><i class="bi bi-phone"></i> Electronics</a>
                 </div>
                 <div class="col-6 col-md-4 col-lg-2">
-                    <a href="products.jsp" class="category-chip"><i class="bi bi-house-heart"></i> Home &amp; Living</a>
+                    <a href="${ctx}/products?category=Home%20%26%20Living" class="category-chip"><i class="bi bi-house-heart"></i> Home &amp; Living</a>
                 </div>
                 <div class="col-6 col-md-4 col-lg-2">
-                    <a href="products.jsp" class="category-chip"><i class="bi bi-basket2"></i> Grocery</a>
+                    <a href="${ctx}/products?category=Grocery" class="category-chip"><i class="bi bi-basket2"></i> Grocery</a>
                 </div>
                 <div class="col-6 col-md-4 col-lg-2">
-                    <a href="products.jsp" class="category-chip"><i class="bi bi-palette"></i> Beauty</a>
+                    <a href="${ctx}/products?category=Beauty" class="category-chip"><i class="bi bi-palette"></i> Beauty</a>
                 </div>
                 <div class="col-6 col-md-4 col-lg-2">
-                    <a href="products.jsp" class="category-chip"><i class="bi bi-book"></i> Books &amp; Media</a>
+                    <a href="${ctx}/products?category=Books%20%26%20Media" class="category-chip"><i class="bi bi-book"></i> Books &amp; Media</a>
                 </div>
             </div>
         </div>
@@ -161,7 +169,7 @@
                     <p class="section-eyebrow mb-1">Fresh picks</p>
                     <h2 class="section-title mb-0">Featured Products</h2>
                 </div>
-                <a href="products.jsp" class="btn btn-link">Go to products <i class="bi bi-arrow-right"></i></a>
+                <a href="${ctx}/products" class="btn btn-link">Go to products <i class="bi bi-arrow-right"></i></a>
             </div>
 
             <div class="alert alert-info phase-note d-flex align-items-center gap-2 mb-4">
@@ -209,13 +217,29 @@
                 <div class="row align-items-center g-4">
                     <div class="col-lg-8">
                         <h3>Ready to start your journey with Ayesha Mart?</h3>
-                        <p>Create a free account today - shop as a buyer, or open a shop as a seller.</p>
+                        <c:choose>
+                            <c:when test="${empty sessionScope.authUser}">
+                                <p>Create a free account today - shop as a buyer, or open a shop as a seller.</p>
+                            </c:when>
+                            <c:otherwise>
+                                <p>Welcome back, <c:out value="${sessionScope.authUser.name}" />. Jump straight into your dashboard.</p>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
                     <div class="col-lg-4 text-lg-end">
-                        <a href="register.jsp" class="btn btn-accent btn-lg px-4 me-2 mb-2 mb-lg-0">
-                            <i class="bi bi-person-plus me-2"></i>Create Account
-                        </a>
-                        <a href="login.jsp" class="btn btn-outline-light btn-lg px-4 mb-2 mb-lg-0">Login</a>
+                        <c:choose>
+                            <c:when test="${empty sessionScope.authUser}">
+                                <a href="${ctx}/register" class="btn btn-accent btn-lg px-4 me-2 mb-2 mb-lg-0">
+                                    <i class="bi bi-person-plus me-2"></i>Create Account
+                                </a>
+                                <a href="${ctx}/login" class="btn btn-outline-light btn-lg px-4 mb-2 mb-lg-0">Login</a>
+                            </c:when>
+                            <c:otherwise>
+                                <a href="${indexDashboardUrl}" class="btn btn-accent btn-lg px-4 mb-2 mb-lg-0">
+                                    <i class="bi bi-speedometer2 me-2"></i>Go to Dashboard
+                                </a>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
                 </div>
             </div>
