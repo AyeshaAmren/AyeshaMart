@@ -168,7 +168,7 @@
                                                         <img src="<c:out value='${p.image}' />" alt="<c:out value='${p.name}' />" class="seller-thumb" onerror="this.onerror=null;this.src='${ctx}/images/placeholder.svg'">
                                                     </c:when>
                                                     <c:otherwise>
-                                                        <img src="${ctx}/<c:out value='${p.image}' />" alt="<c:out value='${p.name}' />" class="seller-thumb">
+                                                        <img src="${ctx}/<c:out value='${p.image}' />" alt="<c:out value='${p.name}' />" class="seller-thumb" onerror="this.onerror=null;this.src='${ctx}/images/placeholder.svg'">
                                                     </c:otherwise>
                                                 </c:choose>
                                                 <div>
@@ -177,7 +177,12 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td><span class="badge badge-am"><c:out value="${p.category}" /></span></td>
+                                        <td>
+                                            <span class="badge badge-am"><c:out value="${p.category}" /></span>
+                                            <c:if test="${not empty p.subCategory}">
+                                                <span class="badge badge-soft mt-1"><c:out value="${p.subCategory}" /></span>
+                                            </c:if>
+                                        </td>
                                         <td class="fw-semibold text-primary-mid">${p.priceDisplay}</td>
                                         <td>
                                             <c:choose>

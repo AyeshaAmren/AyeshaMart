@@ -21,6 +21,7 @@ public class Product implements Serializable {
     private String name;
     private String description;
     private String category;
+    private String subCategory;
     private double price;
     private int stock;
     private String image;
@@ -71,6 +72,14 @@ public class Product implements Serializable {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public String getSubCategory() {
+        return subCategory;
+    }
+
+    public void setSubCategory(String subCategory) {
+        this.subCategory = subCategory;
     }
 
     public double getPrice() {
@@ -205,7 +214,8 @@ public class Product implements Serializable {
     @Override
     public String toString() {
         return "Product{productId='" + productId + "', sellerId='" + sellerId
-                + "', name='" + name + "', category='" + category + "', price=" + price
+                + "', name='" + name + "', category='" + category + "', subCategory='" + subCategory
+                + "', price=" + price
                 + ", stock=" + stock + ", status='" + status + "'}";
     }
 }

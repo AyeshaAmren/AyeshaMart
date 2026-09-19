@@ -32,9 +32,10 @@ public class ProductListServlet extends HttpServlet {
 
         String keyword = request.getParameter("q");
         String category = request.getParameter("category");
+        String subCategory = request.getParameter("subCategory");
         String sort = request.getParameter("sort");
 
-        List<Product> products = productService.getBuyerCatalog(keyword, category, sort);
+        List<Product> products = productService.getBuyerCatalog(keyword, category, subCategory, sort);
 
         Map<String, String> sellerNames = new HashMap<>();
         for (User user : userDao.findAll()) {
@@ -43,9 +44,11 @@ public class ProductListServlet extends HttpServlet {
 
         request.setAttribute("products", products);
         request.setAttribute("categories", categoryService.getNames());
+        request.setAttribute("subCategories", categoryService.getSubCategories(category));
         request.setAttribute("sellerNames", sellerNames);
         request.setAttribute("filterQ", keyword == null ? "" : keyword);
         request.setAttribute("filterCategory", category == null ? "" : category);
+        request.setAttribute("filterSubCategory", subCategory == null ? "" : subCategory);
         request.setAttribute("filterSort", sort == null ? "" : sort);
 
         request.getRequestDispatcher("/products.jsp").forward(request, response);

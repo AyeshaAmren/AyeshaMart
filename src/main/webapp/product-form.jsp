@@ -111,7 +111,24 @@
                                 </div>
                             </div>
 
-                            <div class="col-12">
+                            <div class="col-md-6">
+                                <label for="productSubCategory" class="form-label">Subcategory <span class="text-muted fw-normal">(optional)</span></label>
+                                <input type="text" class="form-control ${not empty validationErrors.subCategory ? 'is-invalid' : ''}"
+                                       id="productSubCategory" name="subCategory" list="subCategorySuggestions"
+                                       placeholder="e.g. Fiction, Men, Skin Care"
+                                       value='<c:out value="${product.subCategory}" />'>
+                                <datalist id="subCategorySuggestions">
+                                    <c:forEach var="sub" items="${allSubCategories}">
+                                        <option value="<c:out value='${sub}' />"></option>
+                                    </c:forEach>
+                                </datalist>
+                                <div class="invalid-feedback">
+                                    <c:out value="${validationErrors.subCategory}" />
+                                </div>
+                                <div class="form-text">Helps buyers filter products, e.g. Fiction under Books.</div>
+                            </div>
+
+                            <div class="col-md-6">
                                 <label for="productImage" class="form-label">Image URL <span class="text-muted fw-normal">(optional)</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="bi bi-image"></i></span>

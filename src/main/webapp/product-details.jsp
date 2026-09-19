@@ -43,7 +43,7 @@
                             <img src="<c:out value='${product.image}' />" alt="<c:out value='${product.name}' />" class="product-thumb-product rounded-3" onerror="this.onerror=null;this.src='${ctx}/images/placeholder.svg'">
                         </c:when>
                         <c:otherwise>
-                            <img src="${ctx}/<c:out value='${product.image}' />" alt="<c:out value='${product.name}' />" class="product-thumb-product rounded-3">
+                            <img src="${ctx}/<c:out value='${product.image}' />" alt="<c:out value='${product.name}' />" class="product-thumb-product rounded-3" onerror="this.onerror=null;this.src='${ctx}/images/placeholder.svg'">
                         </c:otherwise>
                     </c:choose>
                 </div>
@@ -54,6 +54,9 @@
                 <div class="am-card p-4 h-100 d-flex flex-column">
                     <div class="d-flex flex-wrap gap-2 mb-3">
                         <span class="badge badge-am"><c:out value="${product.category}" /></span>
+                        <c:if test="${not empty product.subCategory}">
+                            <span class="badge badge-soft"><c:out value="${product.subCategory}" /></span>
+                        </c:if>
                         <c:choose>
                             <c:when test="${product.available}"><span class="badge badge-success">In stock</span></c:when>
                             <c:otherwise><span class="badge badge-danger">Out of stock</span></c:otherwise>

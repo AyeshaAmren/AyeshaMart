@@ -53,6 +53,7 @@ public class ProductFormServlet extends HttpServlet {
         }
 
         request.setAttribute("categories", categoryService.getNames());
+        request.setAttribute("allSubCategories", categoryService.getAllSubCategories());
         request.getRequestDispatcher("/product-form.jsp").forward(request, response);
     }
 
@@ -74,6 +75,7 @@ public class ProductFormServlet extends HttpServlet {
         input.setName(request.getParameter("name"));
         input.setDescription(request.getParameter("description"));
         input.setCategory(request.getParameter("category"));
+        input.setSubCategory(request.getParameter("subCategory"));
         input.setImage(request.getParameter("image"));
         input.setStatus(request.getParameter("status"));
 
@@ -93,6 +95,7 @@ public class ProductFormServlet extends HttpServlet {
             request.setAttribute("priceText", priceText);
             request.setAttribute("stockText", stockText);
             request.setAttribute("categories", categoryService.getNames());
+            request.setAttribute("allSubCategories", categoryService.getAllSubCategories());
             request.setAttribute("formMode", creating ? "create" : "edit");
             request.getRequestDispatcher("/product-form.jsp").forward(request, response);
         } catch (ProductAccessException e) {

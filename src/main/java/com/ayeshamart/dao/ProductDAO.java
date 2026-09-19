@@ -27,7 +27,8 @@ public class ProductDAO {
     private static final String SHEET_NAME = "Products";
     private static final String[] HEADERS = {
             "productId", "sellerId", "name", "description", "category",
-            "price", "stock", "image", "status", "createdAt", "updatedAt", "rating", "ratingCount"
+            "price", "stock", "image", "status", "createdAt", "updatedAt", "rating", "ratingCount",
+            "subCategory"
     };
     private static final Pattern PRODUCT_ID_PATTERN = Pattern.compile("^P(\\d+)$");
     private static final String TIMESTAMP_FORMAT = "yyyy-MM-dd HH:mm:ss";
@@ -328,6 +329,7 @@ public class ProductDAO {
         writeCell(row, 10, product.getUpdatedAt());
         writeCell(row, 11, String.valueOf(product.getRating()));
         writeCell(row, 12, String.valueOf(product.getRatingCount()));
+        writeCell(row, 13, product.getSubCategory());
     }
 
     private Product rowToProduct(Row row) {
@@ -345,6 +347,7 @@ public class ProductDAO {
         product.setUpdatedAt(formatter.formatCellValue(row.getCell(10)));
         product.setRating(parseDouble(formatter.formatCellValue(row.getCell(11))));
         product.setRatingCount(parseInt(formatter.formatCellValue(row.getCell(12))));
+        product.setSubCategory(formatter.formatCellValue(row.getCell(13)));
         return product;
     }
 

@@ -43,7 +43,7 @@
 
         <!-- Search & filters -->
         <div class="am-card p-3 mb-4">
-            <form action="${ctx}/products" method="get" class="row g-2 align-items-center">
+            <form action="${ctx}/products" method="get" id="catalogFilters" class="row g-2 align-items-center">
                 <div class="col-lg-5">
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-search"></i></span>
@@ -74,6 +74,21 @@
                     <span class="pill-stage">${fn:length(products)} product<c:if test="${fn:length(products) != 1}">s</c:if></span>
                 </div>
             </form>
+
+            <c:if test="${not empty subCategories}">
+                <div class="d-flex flex-wrap gap-2 mt-3 pt-3 border-top">
+                    <button type="submit" form="catalogFilters" name="subCategory" value=""
+                            class="chip ${empty filterSubCategory ? 'chip-active' : ''}">
+                        All in <c:out value="${filterCategory}" />
+                    </button>
+                    <c:forEach var="sub" items="${subCategories}">
+                        <button type="submit" form="catalogFilters" name="subCategory" value="<c:out value='${sub}' />"
+                                class="chip ${filterSubCategory == sub ? 'chip-active' : ''}">
+                            <c:out value="${sub}" />
+                        </button>
+                    </c:forEach>
+                </div>
+            </c:if>
         </div>
 
         <!-- Product grid -->
@@ -102,7 +117,7 @@
                                             <img src="<c:out value='${p.image}' />" alt="<c:out value='${p.name}' />" class="product-thumb-product" onerror="this.onerror=null;this.src='${ctx}/images/placeholder.svg'">
                                         </c:when>
                                         <c:otherwise>
-                                            <img src="${ctx}/<c:out value='${p.image}' />" alt="<c:out value='${p.name}' />" class="product-thumb-product">
+                                            <img src="${ctx}/<c:out value='${p.image}' />" alt="<c:out value='${p.name}' />" class="product-thumb-product" onerror="this.onerror=null;this.src='${ctx}/images/placeholder.svg'">
                                         </c:otherwise>
                                     </c:choose>
                                 </a>

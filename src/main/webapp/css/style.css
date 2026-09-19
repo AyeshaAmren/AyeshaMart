@@ -407,6 +407,30 @@ a:hover {
     color: var(--am-primary);
 }
 
+/* ---------- Subcategory filter chips ---------- */
+.chip {
+    border: 1px solid var(--am-border);
+    border-radius: 999px;
+    background: var(--am-bg);
+    color: var(--am-text);
+    padding: .35rem .95rem;
+    font-size: .85rem;
+    font-weight: 600;
+    line-height: 1.4;
+    transition: all .15s ease;
+}
+
+.chip:hover {
+    border-color: var(--am-primary);
+    color: var(--am-primary);
+}
+
+.chip.chip-active {
+    background: var(--am-primary);
+    border-color: var(--am-primary);
+    color: #fff;
+}
+
 /* ---------- Placeholder (content coming soon) ---------- */
 .ph-box {
     aspect-ratio: 1 / 1;
@@ -620,6 +644,12 @@ img.seller-thumb {
 .badge-accent {
     background-color: var(--am-accent-soft);
     color: var(--am-accent-dark);
+}
+
+.badge-soft {
+    background-color: var(--am-bg);
+    border: 1px solid var(--am-border);
+    color: var(--am-text);
 }
 
 .badge-success {

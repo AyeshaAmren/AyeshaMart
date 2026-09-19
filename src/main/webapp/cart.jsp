@@ -103,7 +103,7 @@
                                             <img src="<c:out value='${item.product.image}' />" alt="<c:out value='${item.product.name}' />" class="cart-thumb" onerror="this.onerror=null;this.src='${ctx}/images/placeholder.svg'">
                                         </c:when>
                                         <c:otherwise>
-                                            <img src="${ctx}/<c:out value='${item.product.image}' />" alt="<c:out value='${item.product.name}' />" class="cart-thumb">
+                                            <img src="${ctx}/<c:out value='${item.product.image}' />" alt="<c:out value='${item.product.name}' />" class="cart-thumb" onerror="this.onerror=null;this.src='${ctx}/images/placeholder.svg'">
                                         </c:otherwise>
                                     </c:choose>
 

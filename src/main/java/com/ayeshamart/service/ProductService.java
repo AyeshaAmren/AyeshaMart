@@ -40,11 +40,12 @@ public class ProductService {
     }
 
     /**
-     * Storefront catalogue: active products only, with optional keyword/category filters and sorting.
+     * Storefront catalogue: active products only, with optional keyword/category/subcategory filters and sorting.
      */
-    public List<Product> getBuyerCatalog(String keyword, String category, String sort) {
+    public List<Product> getBuyerCatalog(String keyword, String category, String subCategory, String sort) {
         List<Product> result = new ArrayList<>();
         String search = (keyword == null) ? null : keyword.trim().toLowerCase();
+        String sub = trimToNull(subCategory);
 
         for (Product product : productDao.findAll()) {
             if (!product.isActive()) {
@@ -52,6 +53,11 @@ public class ProductService {
             }
             if (category != null && !category.trim().isEmpty()
                     && !category.equalsIgnoreCase(product.getCategory())) {
+                continue;
+            }
+            if (sub != null
+                    && (product.getSubCategory() == null
+                    || !sub.equalsIgnoreCase(product.getSubCategory().trim()))) {
                 continue;
             }
             if (search != null && !search.isEmpty()
@@ -194,6 +200,17 @@ public class ProductService {
             } else {
                 input.setCategory(match.getName());
             }
+        }
+
+        String subCategory = trimToNull(input.getSubCategory());
+        if (subCategory != null) {
+            if (subCategory.length() > 60) {
+                errors.addError("subCategory", "Subcategory must be 60 characters or fewer.");
+            } else {
+                input.setSubCategory(subCategory);
+            }
+        } else {
+            input.setSubCategory("");
         }
 
         Double price = parseDouble(priceText);
