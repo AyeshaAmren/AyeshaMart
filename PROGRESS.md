@@ -69,6 +69,22 @@ session can resume instantly.
   cleaned-up nav/footer/breadcrumb links (`${ctx}/...`, filtered category chips, correct
   `&`-encoding); `DataPathUtil` resolution chain rewritten (env -> system property ->
   catalina.base -> user.home). Full final test pass green.
+- Phase 8 (committed `f0f0ced`, pushed): book-store catalog + subcategory filters +
+  offline branded images. `Product`/`ProductDAO` gained `subCategory` (column appended at
+  index 13 so positional indexes 6/8/10/11/12 stay valid); `ProductService.getBuyerCatalog`
+  now takes `(keyword, category, subCategory, sort)`; `CategoryService` maps every category
+  to subcategories; `ProductImageServlet` (`/product-image?id=Pxxxx`) renders a branded SVG
+  tile (category colors, wrapped title, subcategory pill, id) with a 24h cache; new
+  `style.css` `.chip`/`.badge-soft`; products/product-details/cart/index/seller-dashboard
+  JSPs show subcategory + `onerror` fallback; `product-form.jsp` has a subcategory datalist.
+  `CatalogSeeder` expanded to ~288 products: 10 books genres x 25 (~254 books) + Home & Living
+  and Books & Media items so all 10 categories have products; seeding keeps the test-critical
+  Basmati Rice (Grocery, stock 100) and Yoga Mat (Sports, stock 55); a second in-seed pass
+  sets `image=product-image?id=<id>` for seeded products (seller-created products stay blank
+  -> "No image" placeholder, as phase4/5 assert). Build/deploy/tests all green
+  (phase6 54/54, phase5 49/49, phase4 41/41, phase3 12/12) with the same phase6->phase5->
+  phase4->phase3(data-dir chain) run order. Demo instance left running on the `am-catalog`
+  data dir; visual browser check still pending.
 
 ## Business rules already enforced (server-side)
 - Auth: role-based; buyers/sellers/admins see only their dashboards.
