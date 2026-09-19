@@ -1058,3 +1058,166 @@ img.seller-thumb {
         text-align: center;
     }
 }
+/* ---------- Phase 6: checkout, orders, tracking ---------- */
+
+.payment-option {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    padding: .9rem 1rem;
+    border: 1px solid var(--am-border, #e5e2f0);
+    border-radius: .65rem;
+    cursor: pointer;
+    transition: border-color .15s, background-color .15s;
+}
+
+.payment-option:hover {
+    border-color: var(--am-primary, #6b2fa4);
+}
+
+.payment-option:has(input:checked) {
+    border-color: var(--am-primary, #6b2fa4);
+    background: rgba(107, 47, 164, .05);
+}
+
+.payment-radio {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: .6rem;
+    background: #f1eefa;
+    color: var(--am-primary, #6b2fa4);
+    font-size: 1.15rem;
+    flex-shrink: 0;
+}
+
+.payment-sub-block {
+    padding-left: 2.9rem;
+}
+
+.payment-sub-block input,
+.payment-sub-block select {
+    max-width: 420px;
+}
+
+.sticky-summary {
+    position: sticky;
+    top: 90px;
+}
+
+.track-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+    padding-left: 30px;
+}
+
+.track-timeline::before {
+    content: '';
+    position: absolute;
+    left: 9px;
+    top: 6px;
+    bottom: 6px;
+    width: 2px;
+    background: #e5e2f0;
+}
+
+.track-step {
+    position: relative;
+    padding: .55rem 0;
+}
+
+.track-step::before {
+    content: '';
+    position: absolute;
+    left: -26px;
+    top: 1rem;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid #cfcadf;
+    z-index: 1;
+}
+
+.track-step.done::before {
+    background: var(--am-primary, #6b2fa4);
+    border-color: var(--am-primary, #6b2fa4);
+}
+
+.track-step.active::before {
+    background: var(--am-success, #1c9d5e);
+    border-color: var(--am-success, #1c9d5e);
+    box-shadow: 0 0 0 4px rgba(28, 157, 94, .18);
+}
+
+.track-step.done .track-label,
+.track-step.active .track-label {
+    color: var(--am-dark, #333);
+}
+
+.track-step.active .track-label {
+    font-weight: 700;
+}
+
+.track-dot {
+    visibility: hidden;
+}
+
+.order-status-chip {
+    letter-spacing: .04em;
+}
+
+.list-group-tight > * {
+    padding: .45rem .75rem;
+}
+
+.timeline-fill {
+    background: linear-gradient(135deg, #f1eefa, #ffffff);
+}
+
+/* ---------- Phase 6: product reviews ---------- */
+
+.review-box {
+    border: 1px solid var(--am-border, #e5e2f0);
+    border-radius: .65rem;
+    padding: 1rem 1.1rem;
+    background: #fcfbfe;
+}
+
+.star-input {
+    display: flex;
+    gap: .35rem;
+    font-size: 1.6rem;
+    color: #cfcadf;
+}
+
+.star-input label {
+    cursor: pointer;
+    line-height: 1;
+}
+
+.star-input input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.star-input input:checked ~ label i,
+.star-input label:hover i,
+.star-input label:hover ~ label i {
+    color: #f5b301;
+}
+
+.star-input label:hover i,
+.star-input label:hover ~ label i {
+    color: #f5b301;
+}
+
+.star-input label:has(input:checked) i,
+.star-input label:has(input:checked) ~ label i {
+    color: #f5b301;
+}

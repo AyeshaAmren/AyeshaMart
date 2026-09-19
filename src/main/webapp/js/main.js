@@ -176,11 +176,55 @@
         return '\u20B9 ' + num.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
+    /* ---------- Checkout payment method toggle ---------- */
+
+    function syncPaymentBlock(block, visible, required) {
+        if (!block) return;
+        block.style.display = visible ? 'block' : 'none';
+        Array.prototype.forEach.call(block.querySelectorAll('input, select, textarea'), function (inp) {
+            if (inp.type !== 'radio' && inp.type !== 'checkbox') {
+                inp.required = required;
+            }
+        });
+    }
+
+    function initPaymentOptions() {
+        var upiBlock = document.getElementById('upiBlock');
+        var cardBlock = document.getElementById('cardBlock');
+        var radios = document.querySelectorAll('input[name="paymentMethod"]');
+        if (!upiBlock && !cardBlock) return;
+        if (!radios.length) return;
+
+        var sync = function () {
+            var checked = document.querySelector('input[name="paymentMethod"]:checked');
+            var method = checked ? checked.value : 'COD';
+            syncPaymentBlock(upiBlock, method === 'UPI', method === 'UPI');
+            syncPaymentBlock(cardBlock, method === 'CARD', method === 'CARD');
+        };
+
+        Array.prototype.forEach.call(radios, function (radio) {
+            radio.addEventListener('change', sync);
+        });
+        sync();
+    }
+
+    function initCardFormatting() {
+        var card = document.querySelector('input[name="cardNumber"]');
+        if (!card) return;
+        card.addEventListener('input', function () {
+            var digits = card.value.replace(/\D/g, '').substring(0, 16);
+            var parts = digits.match(/.{1,4}/g) || [];
+            card.value = parts.join(' ');
+        });
+    }
+
     /* ---------- Init ---------- */
 
     document.addEventListener('DOMContentLoaded', function () {
         initValidation();
         autoDismissAlerts();
+        initPaymentOptions();
+        initCardFormatting();
     });
 
     window.AyeshaMart = {

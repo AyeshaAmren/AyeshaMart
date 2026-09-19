@@ -62,4 +62,25 @@ public final class DataPathUtil {
     public static File getCartItemsFile() {
         return new File(getDataDirectory(), "cart-items.xlsx");
     }
+
+    /**
+     * Returns the orders.xlsx file used for order and order-item storage.
+     */
+    public static File getOrdersFile() {
+        return new File(getDataDirectory(), "orders.xlsx");
+    }
+
+    /**
+     * Returns the payments.xlsx file used for demo payment records.
+     */
+    public static File getPaymentsFile() {
+        return new File(getDataDirectory(), "payments.xlsx");
+    }
+
+    /**
+     * Returns the reviews.xlsx file used for product reviews and ratings.
+     */
+    public static File getReviewsFile() {
+        return new File(getDataDirectory(), "reviews.xlsx");
+    }
 }

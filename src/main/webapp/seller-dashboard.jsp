@@ -68,10 +68,10 @@
                 <a href="${ctx}/seller/products" class="quick-action"><i class="bi bi-box-seam"></i>My Products</a>
             </div>
             <div class="col-6 col-md-4 col-lg-3">
-                <a href="#" class="quick-action"><i class="bi bi-receipt"></i>Orders Received</a>
+                <a href="${ctx}/seller/orders" class="quick-action"><i class="bi bi-receipt"></i>Orders Received</a>
             </div>
             <div class="col-6 col-md-4 col-lg-3">
-                <a href="#" class="quick-action"><i class="bi bi-shop"></i>Shop Profile</a>
+                <a href="${ctx}/seller/products" class="quick-action"><i class="bi bi-shop"></i>Shop Profile</a>
             </div>
         </div>
 

@@ -21,7 +21,7 @@
 
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="${ctx}/index.jsp"><i class="bi bi-house-door me-1"></i>Home</a></li>
+                <li class="breadcrumb-item"><a href="${ctx}/home"><i class="bi bi-house-door me-1"></i>Home</a></li>
                 <li class="breadcrumb-item active" aria-current="page">My Cart</li>
             </ol>
         </nav>
@@ -71,6 +71,7 @@
                         <c:when test="${param.error == 'outofstock'}">That product is out of stock and cannot be added.</c:when>
                         <c:when test="${param.error == 'stock'}">The requested quantity exceeds the available stock.</c:when>
                         <c:when test="${param.error == 'notincart'}">That item is not in your cart.</c:when>
+                        <c:when test="${param.error == 'cartempty'}">Your cart is empty. Add some products before checking out.</c:when>
                         <c:otherwise>We could not update your cart. Please try again.</c:otherwise>
                     </c:choose>
                 </span>
@@ -194,9 +195,9 @@
                                 <span class="h4 mb-0 text-primary-mid">${cart.subtotalDisplay}</span>
                             </div>
 
-                            <button type="button" class="btn btn-primary w-100 mb-2" disabled title="Checkout arrives in a later phase">
+                            <a href="${ctx}/checkout" class="btn btn-primary w-100 mb-2">
                                 <i class="bi bi-bag-check me-1"></i>Proceed to Checkout
-                            </button>
+                            </a>
 
                             <form action="${ctx}/cart" method="post" onsubmit="return confirm('Clear all items from your cart?');">
                                 <input type="hidden" name="action" value="clear">
@@ -206,7 +207,7 @@
                             </form>
 
                             <p class="small text-muted mt-3 mb-0">
-                                <i class="bi bi-info-circle me-1"></i>Checkout, payment and orders arrive in a later phase.
+                                <i class="bi bi-info-circle me-1"></i>Checkout with cash on delivery, UPI or card. Online orders are confirmed instantly.
                             </p>
                         </div>
                     </div>

@@ -2,6 +2,7 @@ package com.ayeshamart.config;
 
 import com.ayeshamart.dao.UserDAO;
 import com.ayeshamart.model.User;
+import com.ayeshamart.service.CatalogSeeder;
 import com.ayeshamart.service.CategoryService;
 import com.ayeshamart.util.PasswordUtil;
 import jakarta.servlet.ServletContextEvent;
@@ -27,6 +28,7 @@ public class AppInitializer implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         try {
             new CategoryService().seedDefaults();
+            new CatalogSeeder().seed();
 
             UserDAO userDao = new UserDAO();
             if (hasAdmin(userDao)) {

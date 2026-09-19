@@ -57,7 +57,7 @@ public final class ExcelUtil {
         }
     }
 
-    private static void writeHeaderRow(Sheet sheet, String[] headers) {
+    public static void writeHeaderRow(Sheet sheet, String[] headers) {
         Row headerRow = sheet.createRow(0);
         CellStyle headerStyle = sheet.getWorkbook().createCellStyle();
         Font headerFont = sheet.getWorkbook().createFont();

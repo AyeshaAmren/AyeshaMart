@@ -166,7 +166,7 @@ Check "category filter excludes grocery" ($r.Body -notmatch "Hidden Item") "filt
 $r = Send-Am $anon GET "$base/products?q=headphones" $null
 Check "keyword search works" ($r.Body -match "Wireless Headphones Pro") "search failed"
 
-$r = Send-Am $anon GET "$base/products?category=Grocery" $null
+$r = Send-Am $anon GET "$base/products?category=Pet%20Supplies" $null
 Check "empty category shows empty state" (($r.Status -eq 200) -and ($r.Body -match "No products found")) "empty state missing"
 
 # ---- Access control ----

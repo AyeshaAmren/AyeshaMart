@@ -17,7 +17,11 @@ public class CategoryService {
             {"Home & Living", "Furniture, decor and kitchen"},
             {"Grocery", "Everyday food and household essentials"},
             {"Beauty", "Skin care, makeup and personal care"},
-            {"Books & Media", "Books, stationery and entertainment"}
+            {"Books & Media", "Books, stationery and entertainment"},
+            {"Sports", "Fitness, outdoor and sports equipment"},
+            {"Accessories", "Bags, watches, belts and everyday carry"},
+            {"Home & Kitchen", "Kitchen appliances, cookware and home essentials"},
+            {"Books", "Books, journals and reading accessories"}
     };
 
     private final CategoryDAO categoryDao = new CategoryDAO();
@@ -39,13 +43,14 @@ public class CategoryService {
     }
 
     /**
-     * Seeds the default categories the first time the application runs.
+     * Seeds the default categories. Idempotent: each default is added only when it is
+     * missing, so existing categories (and any products using them) are never touched.
      */
     public void seedDefaults() {
-        if (!categoryDao.isEmpty()) {
-            return;
-        }
         for (String[] entry : DEFAULTS) {
+            if (categoryDao.findByName(entry[0]) != null) {
+                continue;
+            }
             Category category = new Category();
             category.setName(entry[0]);
             category.setDescription(entry[1]);

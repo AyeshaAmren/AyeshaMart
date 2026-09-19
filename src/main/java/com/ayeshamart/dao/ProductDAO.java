@@ -113,6 +113,14 @@ public class ProductDAO {
     }
 
     /**
+     * True when no products are stored yet (used by the catalog seeder, which only
+     * runs once on an empty store so existing products are never duplicated).
+     */
+    public boolean isEmpty() {
+        return findAll().isEmpty();
+    }
+
+    /**
      * Returns all products belonging to a seller.
      */
     public List<Product> findBySellerId(String sellerId) {
@@ -189,6 +197,115 @@ public class ProductDAO {
                 if (rowIndex < lastRow) {
                     sheet.shiftRows(rowIndex + 1, lastRow, -1);
                 }
+                ExcelUtil.save(file, workbook);
+                return true;
+            } finally {
+                closeQuietly(workbook);
+            }
+        }
+    }
+
+    /**
+     * Reduces a product's stock by the given quantity (checked and updated in the same
+     * locked block so two requests cannot oversell). Returns true when stock was reduced.
+     */
+    public boolean decreaseStock(String productId, int quantity) {
+        if (productId == null || quantity <= 0) {
+            return false;
+        }
+        synchronized (FILE_LOCK) {
+            File file = DataPathUtil.getProductsFile();
+            if (!file.exists()) {
+                return false;
+            }
+            Workbook workbook = ExcelUtil.openOrCreate(file, SHEET_NAME, HEADERS);
+            try {
+                Sheet sheet = workbook.getSheet(SHEET_NAME);
+                if (sheet == null) {
+                    return false;
+                }
+                int rowIndex = findRowIndex(sheet, productId);
+                if (rowIndex < 0) {
+                    return false;
+                }
+                Row row = sheet.getRow(rowIndex);
+                int current = (int) parseDouble(formatter.formatCellValue(row.getCell(6)));
+                if (current < quantity) {
+                    return false;
+                }
+                String status = formatter.formatCellValue(row.getCell(8));
+                if (!Product.STATUS_ACTIVE.equalsIgnoreCase(status)) {
+                    return false;
+                }
+                writeCell(row, 6, String.valueOf(current - quantity));
+                writeCell(row, 10, timestamp());
+                ExcelUtil.save(file, workbook);
+                return true;
+            } finally {
+                closeQuietly(workbook);
+            }
+        }
+    }
+
+    /**
+     * Restores stock for a product (used when an order is cancelled).
+     */
+    public boolean restoreStock(String productId, int quantity) {
+        if (productId == null || quantity <= 0) {
+            return false;
+        }
+        synchronized (FILE_LOCK) {
+            File file = DataPathUtil.getProductsFile();
+            if (!file.exists()) {
+                return false;
+            }
+            Workbook workbook = ExcelUtil.openOrCreate(file, SHEET_NAME, HEADERS);
+            try {
+                Sheet sheet = workbook.getSheet(SHEET_NAME);
+                if (sheet == null) {
+                    return false;
+                }
+                int rowIndex = findRowIndex(sheet, productId);
+                if (rowIndex < 0) {
+                    return false;
+                }
+                Row row = sheet.getRow(rowIndex);
+                int current = (int) parseDouble(formatter.formatCellValue(row.getCell(6)));
+                writeCell(row, 6, String.valueOf(current + quantity));
+                writeCell(row, 10, timestamp());
+                ExcelUtil.save(file, workbook);
+                return true;
+            } finally {
+                closeQuietly(workbook);
+            }
+        }
+    }
+
+    /**
+     * Stores the aggregate rating and review count derived from the reviews workbook.
+     */
+    public boolean updateRating(String productId, double rating, int count) {
+        if (productId == null) {
+            return false;
+        }
+        synchronized (FILE_LOCK) {
+            File file = DataPathUtil.getProductsFile();
+            if (!file.exists()) {
+                return false;
+            }
+            Workbook workbook = ExcelUtil.openOrCreate(file, SHEET_NAME, HEADERS);
+            try {
+                Sheet sheet = workbook.getSheet(SHEET_NAME);
+                if (sheet == null) {
+                    return false;
+                }
+                int rowIndex = findRowIndex(sheet, productId);
+                if (rowIndex < 0) {
+                    return false;
+                }
+                Row row = sheet.getRow(rowIndex);
+                writeCell(row, 11, String.valueOf(rating));
+                writeCell(row, 12, String.valueOf(count));
                 ExcelUtil.save(file, workbook);
                 return true;
             } finally {

@@ -39,19 +39,50 @@ session can resume instantly.
   add/update/remove/clear), `cart.jsp`. Header shows a cart link + live badge for buyers.
   Products gained `rating`/`ratingCount` (columns appended to products.xlsx; no review
   system yet, so they display "No ratings yet").
+- Phase 6 (checkout, orders, payments, delivery, reviews): `Order`, `OrderItem`, `Payment`,
+  `Review` (transient `buyerName`), `OrderDAO`, `PaymentDAO`, `ReviewDAO` (orders/payments/
+  reviews.xlsx); `CheckoutException`, `ReviewException`, `PaymentService` (demo gateway:
+  COD always pending, UPI fails when VPA contains "fail", card fails when the number ends
+  in 0; storage never keeps real card data), `OrderService` (multi-seller line status,
+  recomputed header, stock reduce/restore with per-product locks, strict per-role access),
+  `ReviewService` (only delivered products, one review per buyer+product). Controllers:
+  `CheckoutServlet` `/checkout`, `OrderListServlet` `/orders`, `OrderDetailServlet`
+  `/order` + `/order/confirm` + `/order/cancel`, `ReviewServlet` `/review`,
+  `BuyerDashboardServlet` `/buyer`, `SellerOrdersServlet` `/seller/orders` +
+  `/seller/order/advance` + `/seller/order/cancel`, `AdminDashboardServlet` `/admin`,
+  `AdminOrdersServlet` `/admin/orders` + `/admin/order/status` + `/admin/order/payment`,
+  `HomeServlet` `/home`. JSPs: `checkout.jsp`, `order-track.jsp`, `orders.jsp`,
+  `seller-orders.jsp`, `admin-orders.jsp`, updated `buyer-dashboard.jsp`,
+  `admin-dashboard.jsp`, `cart.jsp`, `product-details.jsp`, `index.jsp`, `header.jsp`.
+  `CatalogSeeder` seeds 32 products (8 categories) + demo seller
+  `seller@ayeshamart.com` / `Seller@123` only when the DB is empty.
 
 ## Business rules already enforced (server-side)
 - Auth: role-based; buyers/sellers/admins see only their dashboards.
 - Products: sellers can only edit/delete their own products; only active products are public.
 - Cart: quantity > 0; never exceeds current stock; out-of-stock/inactive cannot be added;
   cart is always keyed to the signed-in buyer (private; cross-buyer access blocked).
+- Orders: buyers only read/cancel their own orders; cancel only while PLACED/CONFIRMED
+  (restores stock); sellers only manage their own lines (advance to DELIVERED, cancel);
+  admins change any order status / mark COD payment received.
+- Payments: UPI/card succeed unless the demo rules say otherwise; failed payment keeps the
+  cart intact and never creates an order.
+- Reviews: only after a DELIVERED line for that product; one review per buyer+product;
+  duplicate/not-delivered attempts are rejected and the product rating is refreshed.
 
 ## Tests
 `manual-tests/` holds PowerShell HTTP test scripts (run while Tomcat is up):
 - `phase3-regression.ps1` (12 checks)
 - `phase4-test.ps1` (41 checks)
 - `phase5-test.ps1` (49 checks)
-Run order: phase5 -> phase4 -> phase3 (phase3/4 register users that later scripts reuse).
+- `phase6-test.ps1` (54 checks) - checkout/orders/payment/delivery/reviews; uses a fresh
+  data dir because account emails and order ids (O0001..) are deterministic.
+Run order: phase6 -> phase5 -> phase4 -> phase3. Each suite is single-run against a fresh
+data dir (they mutate shared data); restart Tomcat with a new `AYESHA_MART_DATA_DIR` per run.
 
-## Next phase (not started)
-Phase 6: checkout, orders, payment. Do not implement until requested.
+## Known notes / limitations
+- `SessionUtil.dashboardPath()` returns JSP filenames (NOT servlets) because phase3/4/5
+  login-redirect checks assert them; the protected JSPs self-redirect to their servlets.
+- EL has no array literals: order-track/admin-orders use `c:forTokens` / `c:choose`.
+- Legacy sibling folder `Ayesha capstone\` is a copy; only `src\` (active project root) is
+  edited.

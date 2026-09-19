@@ -5,6 +5,7 @@ import com.ayeshamart.model.Product;
 import com.ayeshamart.model.SessionUser;
 import com.ayeshamart.model.User;
 import com.ayeshamart.service.ProductService;
+import com.ayeshamart.service.ReviewService;
 import com.ayeshamart.util.SessionUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -22,6 +23,7 @@ public class ProductDetailsServlet extends HttpServlet {
 
     private final ProductService productService = new ProductService();
     private final UserDAO userDao = new UserDAO();
+    private final ReviewService reviewService = new ReviewService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -40,6 +42,15 @@ public class ProductDetailsServlet extends HttpServlet {
         User seller = userDao.findById(product.getSellerId());
         request.setAttribute("product", product);
         request.setAttribute("sellerName", seller != null ? seller.getName() : "Ayesha Mart Seller");
+
+        request.setAttribute("productReviews", reviewService.getProductReviews(product.getProductId()));
+        if (currentUser != null && User.ROLE_BUYER.equalsIgnoreCase(currentUser.getRole())) {
+            request.setAttribute("canReview", reviewService.canReview(viewerId, product.getProductId()));
+            request.setAttribute("hasReviewed", reviewService.hasReviewed(viewerId, product.getProductId()));
+        } else {
+            request.setAttribute("canReview", false);
+            request.setAttribute("hasReviewed", false);
+        }
 
         request.getRequestDispatcher("/product-details.jsp").forward(request, response);
     }

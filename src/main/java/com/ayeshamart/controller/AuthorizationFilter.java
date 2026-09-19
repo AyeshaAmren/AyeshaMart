@@ -24,7 +24,8 @@ import java.io.IOException;
  * dashboard URL in the browser cannot bypass the checks.
  */
 @WebFilter(filterName = "AuthorizationFilter",
-        urlPatterns = {"/buyer-dashboard.jsp", "/seller-dashboard.jsp", "/admin-dashboard.jsp"})
+        urlPatterns = {"/buyer-dashboard.jsp", "/seller-dashboard.jsp", "/admin-dashboard.jsp",
+                "/seller-orders.jsp", "/admin-orders.jsp"})
 public class AuthorizationFilter implements Filter {
 
     @Override
@@ -60,10 +61,10 @@ public class AuthorizationFilter implements Filter {
      * Returns the role required for a protected path, or null if the path is public.
      */
     private String requiredRoleFor(String servletPath) {
-        if ("/admin-dashboard.jsp".equals(servletPath)) {
+        if ("/admin-dashboard.jsp".equals(servletPath) || "/admin-orders.jsp".equals(servletPath)) {
             return User.ROLE_ADMIN;
         }
-        if ("/seller-dashboard.jsp".equals(servletPath)) {
+        if ("/seller-dashboard.jsp".equals(servletPath) || "/seller-orders.jsp".equals(servletPath)) {
             return User.ROLE_SELLER;
         }
         if ("/buyer-dashboard.jsp".equals(servletPath)) {

@@ -1,12 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
-<c:set var="indexDashboardUrl" value="${ctx}/buyer-dashboard.jsp" />
+<c:set var="indexDashboardUrl" value="${ctx}/buyer" />
 <c:if test="${sessionScope.authUser.role == 'seller'}">
     <c:set var="indexDashboardUrl" value="${ctx}/seller/products" />
 </c:if>
 <c:if test="${sessionScope.authUser.role == 'admin'}">
-    <c:set var="indexDashboardUrl" value="${ctx}/admin-dashboard.jsp" />
+    <c:set var="indexDashboardUrl" value="${ctx}/admin" />
 </c:if>
 
 <jsp:include page="/WEB-INF/includes/head.jsp">
@@ -119,7 +119,7 @@
                         <h5 class="role-title">For Administrators</h5>
                         <p class="role-desc">Manage users, approve products, oversee orders, deliveries and payments from the central admin dashboard.</p>
                         <div class="role-cta">
-                            <a href="${ctx}/admin-dashboard.jsp" class="btn btn-outline-primary btn-sm w-100">Admin Dashboard <i class="bi bi-arrow-right ms-1"></i></a>
+                            <a href="${ctx}/admin" class="btn btn-outline-primary btn-sm w-100">Admin Dashboard <i class="bi bi-arrow-right ms-1"></i></a>
                         </div>
                     </div>
                 </div>
@@ -139,24 +139,43 @@
             </div>
 
             <div class="row g-3">
-                <div class="col-6 col-md-4 col-lg-2">
-                    <a href="${ctx}/products?category=Fashion" class="category-chip"><i class="bi bi-tshirt"></i> Fashion</a>
-                </div>
-                <div class="col-6 col-md-4 col-lg-2">
-                    <a href="${ctx}/products?category=Electronics" class="category-chip"><i class="bi bi-phone"></i> Electronics</a>
-                </div>
-                <div class="col-6 col-md-4 col-lg-2">
-                    <a href="${ctx}/products?category=Home%20%26%20Living" class="category-chip"><i class="bi bi-house-heart"></i> Home &amp; Living</a>
-                </div>
-                <div class="col-6 col-md-4 col-lg-2">
-                    <a href="${ctx}/products?category=Grocery" class="category-chip"><i class="bi bi-basket2"></i> Grocery</a>
-                </div>
-                <div class="col-6 col-md-4 col-lg-2">
-                    <a href="${ctx}/products?category=Beauty" class="category-chip"><i class="bi bi-palette"></i> Beauty</a>
-                </div>
-                <div class="col-6 col-md-4 col-lg-2">
-                    <a href="${ctx}/products?category=Books%20%26%20Media" class="category-chip"><i class="bi bi-book"></i> Books &amp; Media</a>
-                </div>
+                <c:choose>
+                    <c:when test="${not empty homeCategories}">
+                        <c:forEach var="cat" items="${homeCategories}">
+                            <div class="col-6 col-md-4 col-lg-3">
+                                <a href="${ctx}/products?category=${cat}" class="category-chip">
+                                    <i class="bi bi-bag me-1"></i> <c:out value="${cat}" />
+                                </a>
+                            </div>
+                        </c:forEach>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="col-6 col-md-4 col-lg-2">
+                            <a href="${ctx}/products?category=Fashion" class="category-chip"><i class="bi bi-tshirt"></i> Fashion</a>
+                        </div>
+                        <div class="col-6 col-md-4 col-lg-2">
+                            <a href="${ctx}/products?category=Electronics" class="category-chip"><i class="bi bi-phone"></i> Electronics</a>
+                        </div>
+                        <div class="col-6 col-md-4 col-lg-2">
+                            <a href="${ctx}/products?category=Home%20%26%20Kitchen" class="category-chip"><i class="bi bi-house-heart"></i> Home &amp; Kitchen</a>
+                        </div>
+                        <div class="col-6 col-md-4 col-lg-2">
+                            <a href="${ctx}/products?category=Grocery" class="category-chip"><i class="bi bi-basket2"></i> Grocery</a>
+                        </div>
+                        <div class="col-6 col-md-4 col-lg-2">
+                            <a href="${ctx}/products?category=Beauty" class="category-chip"><i class="bi bi-palette"></i> Beauty</a>
+                        </div>
+                        <div class="col-6 col-md-4 col-lg-2">
+                            <a href="${ctx}/products?category=Books" class="category-chip"><i class="bi bi-book"></i> Books</a>
+                        </div>
+                        <div class="col-6 col-md-4 col-lg-2">
+                            <a href="${ctx}/products?category=Sports" class="category-chip"><i class="bi bi-trophy"></i> Sports</a>
+                        </div>
+                        <div class="col-6 col-md-4 col-lg-2">
+                            <a href="${ctx}/products?category=Accessories" class="category-chip"><i class="bi bi-watch"></i> Accessories</a>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
             </div>
         </div>
     </section>
@@ -172,41 +191,65 @@
                 <a href="${ctx}/products" class="btn btn-link">Go to products <i class="bi bi-arrow-right"></i></a>
             </div>
 
-            <div class="alert alert-info phase-note d-flex align-items-center gap-2 mb-4">
-                <i class="bi bi-info-circle-fill"></i>
-                <span>The product catalog goes live in a later phase. These cards preview the storefront layout.</span>
-            </div>
-
-            <div class="row g-4">
-                <div class="col-6 col-md-3">
-                    <div class="ph-box">
-                        <i class="bi bi-image"></i>
-                        <span>Product Image</span>
-                        <small>Coming soon</small>
+            <c:choose>
+                <c:when test="${empty featuredProducts}">
+                    <div class="alert alert-info phase-note d-flex align-items-center gap-2 mb-4">
+                        <i class="bi bi-info-circle-fill"></i>
+                        <span>Featured products load here automatically from the live catalog.</span>
                     </div>
-                </div>
-                <div class="col-6 col-md-3">
-                    <div class="ph-box">
-                        <i class="bi bi-image"></i>
-                        <span>Product Image</span>
-                        <small>Coming soon</small>
+                </c:when>
+                <c:otherwise>
+                    <div class="row g-4">
+                        <c:forEach var="p" items="${featuredProducts}">
+                            <div class="col-sm-6 col-lg-4 col-xl-3">
+                                <div class="am-card hoverable h-100 d-flex flex-column overflow-hidden">
+                                    <a href="${ctx}/product?id=${p.productId}" class="product-thumb-link">
+                                        <c:choose>
+                                            <c:when test="${empty p.image}">
+                                                <div class="ph-box product-thumb">
+                                                    <i class="bi bi-image"></i>
+                                                    <span>No image</span>
+                                                </div>
+                                            </c:when>
+                                            <c:when test="${p.image.startsWith('http')}">
+                                                <img src="<c:out value='${p.image}' />" alt="<c:out value='${p.name}' />" class="product-thumb-product">
+                                            </c:when>
+                                            <c:otherwise>
+                                                <img src="${ctx}/<c:out value='${p.image}' />" alt="<c:out value='${p.name}' />" class="product-thumb-product">
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </a>
+                                    <div class="p-3 d-flex flex-column flex-grow-1">
+                                        <h6 class="mb-1"><a href="${ctx}/product?id=${p.productId}" class="text-dark"><c:out value="${p.name}" /></a></h6>
+                                        <div class="mb-2">
+                                            <c:choose>
+                                                <c:when test="${p.ratingCount > 0}">
+                                                    <span class="rating-stars">
+                                                        <c:forEach begin="1" end="5" var="s">
+                                                            <i class="bi ${s <= p.ratingStars ? 'bi-star-fill' : 'bi-star'}"></i>
+                                                        </c:forEach>
+                                                    </span>
+                                                    <span class="small text-muted ms-1">${p.ratingDisplay} (${p.ratingCount})</span>
+                                                </c:when>
+                                                <c:otherwise><span class="small text-muted"><i class="bi bi-star me-1"></i>New arrival</span></c:otherwise>
+                                            </c:choose>
+                                        </div>
+                                        <p class="small text-muted mb-2">
+                                            <i class="bi bi-shop me-1"></i>Sold by <c:out value="${sellerNames[p.sellerId]}" />
+                                        </p>
+                                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                                            <span class="fw-bold text-primary-mid">${p.priceDisplay}</span>
+                                            <a href="${ctx}/product?id=${p.productId}" class="btn btn-soft btn-sm">
+                                                <i class="bi bi-eye me-1"></i>View
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </c:forEach>
                     </div>
-                </div>
-                <div class="col-6 col-md-3">
-                    <div class="ph-box">
-                        <i class="bi bi-image"></i>
-                        <span>Product Image</span>
-                        <small>Coming soon</small>
-                    </div>
-                </div>
-                <div class="col-6 col-md-3">
-                    <div class="ph-box">
-                        <i class="bi bi-image"></i>
-                        <span>Product Image</span>
-                        <small>Coming soon</small>
-                    </div>
-                </div>
-            </div>
+                </c:otherwise>
+            </c:choose>
         </div>
     </section>
 

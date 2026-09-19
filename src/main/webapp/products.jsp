@@ -22,7 +22,7 @@
 
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="${ctx}/index.jsp"><i class="bi bi-house-door me-1"></i>Home</a></li>
+                <li class="breadcrumb-item"><a href="${ctx}/home"><i class="bi bi-house-door me-1"></i>Home</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Products</li>
             </ol>
         </nav>

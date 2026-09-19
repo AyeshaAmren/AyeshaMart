@@ -3,17 +3,17 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <c:set var="authUser" value="${sessionScope.authUser}" />
 
-<c:set var="dashboardUrl" value="${ctx}/buyer-dashboard.jsp" />
+<c:set var="dashboardUrl" value="${ctx}/buyer" />
 <c:if test="${authUser.role == 'seller'}">
     <c:set var="dashboardUrl" value="${ctx}/seller/products" />
 </c:if>
 <c:if test="${authUser.role == 'admin'}">
-    <c:set var="dashboardUrl" value="${ctx}/admin-dashboard.jsp" />
+    <c:set var="dashboardUrl" value="${ctx}/admin" />
 </c:if>
 
 <nav class="navbar navbar-expand-lg am-navbar sticky-top">
     <div class="container">
-        <a class="navbar-brand d-flex align-items-center gap-2" href="${ctx}/index.jsp">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="${ctx}/home">
             <img src="${ctx}/images/logo.svg" alt="Ayesha Mart logo" width="40" height="40" class="am-logo">
             <span class="brand-text">Ayesha <span class="brand-highlight">Mart</span></span>
         </a>
@@ -26,7 +26,7 @@
         <div class="collapse navbar-collapse" id="mainNav">
             <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link ${param.activeNav == 'home' ? 'active' : ''}" href="${ctx}/index.jsp">
+                    <a class="nav-link ${param.activeNav == 'home' ? 'active' : ''}" href="${ctx}/home">
                         <i class="bi bi-house-door me-1"></i>Home
                     </a>
                 </li>
@@ -44,6 +44,18 @@
                             </c:if>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link ${param.activeNav == 'orders' ? 'active' : ''}" href="${ctx}/orders">
+                            <i class="bi bi-receipt me-1"></i>My Orders
+                        </a>
+                    </li>
+                </c:if>
+                <c:if test="${authUser.role == 'seller'}">
+                    <li class="nav-item">
+                        <a class="nav-link ${param.activeNav == 'sellerOrders' ? 'active' : ''}" href="${ctx}/seller/orders">
+                            <i class="bi bi-receipt me-1"></i>Orders
+                        </a>
+                    </li>
                 </c:if>
 
                 <c:choose>
@@ -53,9 +65,9 @@
                                 <i class="bi bi-speedometer2 me-1"></i>Dashboards
                             </a>
                             <ul class="dropdown-menu drop-menu">
-                                <li><a class="dropdown-item" href="${ctx}/buyer-dashboard.jsp"><i class="bi bi-bag me-2"></i>Buyer Dashboard</a></li>
-                                <li><a class="dropdown-item" href="${ctx}/seller-dashboard.jsp"><i class="bi bi-shop me-2"></i>Seller Dashboard</a></li>
-                                <li><a class="dropdown-item" href="${ctx}/admin-dashboard.jsp"><i class="bi bi-shield-lock me-2"></i>Admin Dashboard</a></li>
+                                <li><a class="dropdown-item" href="${ctx}/buyer"><i class="bi bi-bag me-2"></i>Buyer Dashboard</a></li>
+                                <li><a class="dropdown-item" href="${ctx}/seller/products"><i class="bi bi-shop me-2"></i>Seller Dashboard</a></li>
+                                <li><a class="dropdown-item" href="${ctx}/admin"><i class="bi bi-shield-lock me-2"></i>Admin Dashboard</a></li>
                             </ul>
                         </li>
                     </c:when>
