@@ -21,6 +21,16 @@
                 </div>
 
                 <div class="am-form-card">
+                    <c:if test="${not empty registrationSuccess}">
+                        <div class="alert alert-success d-flex align-items-center gap-2 mb-3" role="alert">
+                            <i class="bi bi-check-circle-fill"></i>
+                            <div>
+                                <strong>Account created successfully!</strong>
+                                <span>You can now login with <c:out value="${registeredEmail}" />.</span>
+                            </div>
+                        </div>
+                    </c:if>
+
                     <form action="#" method="post" id="loginForm" data-validate-form novalidate>
 
                         <div class="alert alert-info phase-note d-flex align-items-center gap-2 mb-3">

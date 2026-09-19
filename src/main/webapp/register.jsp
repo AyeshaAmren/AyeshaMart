@@ -24,16 +24,18 @@
                 </div>
 
                 <div class="am-form-card">
-                    <form action="#" method="post" id="registerForm" data-validate-form novalidate>
+                    <form action="${ctx}/register" method="post" id="registerForm" data-validate-form novalidate>
 
-                        <div class="alert alert-info phase-note d-flex align-items-center gap-2 mb-3">
-                            <i class="bi bi-info-circle-fill"></i>
-                            <span>Registration is integrated in Phase 2. This is the register page layout.</span>
-                        </div>
+                        <c:if test="${not empty validationErrors}">
+                            <div class="alert alert-danger d-flex align-items-center gap-2 mb-3">
+                                <i class="bi bi-exclamation-triangle-fill"></i>
+                                <span>Please fix the highlighted fields below to create your account.</span>
+                            </div>
+                        </c:if>
 
                         <!-- Role selection -->
                         <p class="form-label mb-2">I want to join as</p>
-                        <div class="row g-2 mb-3">
+                        <div class="row g-2 mb-2">
                             <div class="col-6">
                                 <input type="radio" class="btn-check" name="role" id="roleBuyer" value="buyer" autocomplete="off"
                                        ${preselectRole == 'buyer' ? 'checked' : ''}>
@@ -53,69 +55,89 @@
                                 </label>
                             </div>
                         </div>
-
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label for="regFirstName" class="form-label">First name</label>
-                                <input type="text" class="form-control" id="regFirstName" name="firstName"
-                                       placeholder="First name" data-validate="required"
-                                       data-error-required="First name is required.">
-                                <div class="invalid-feedback" id="regFirstName-feedback"></div>
+                        <c:if test="${not empty validationErrors.role}">
+                            <div class="invalid-feedback d-block mb-2" id="regRole-feedback">
+                                <c:out value="${validationErrors.role}" />
                             </div>
+                        </c:if>
 
-                            <div class="col-md-6">
-                                <label for="regLastName" class="form-label">Last name</label>
-                                <input type="text" class="form-control" id="regLastName" name="lastName"
-                                       placeholder="Last name" data-validate="required"
-                                       data-error-required="Last name is required.">
-                                <div class="invalid-feedback" id="regLastName-feedback"></div>
+                        <div class="row g-3 mt-1">
+                            <div class="col-12">
+                                <label for="regFullName" class="form-label">Full name</label>
+                                <input type="text" class="form-control ${not empty validationErrors.fullName ? 'is-invalid' : ''}"
+                                       id="regFullName" name="fullName"
+                                       placeholder="Your full name" autocomplete="name"
+                                       value='<c:out value="${param.fullName}" />'
+                                       data-validate="required" data-error-required="Full name is required.">
+                                <div class="invalid-feedback" id="regFullName-feedback">
+                                    <c:out value="${validationErrors.fullName}" />
+                                </div>
                             </div>
 
                             <div class="col-12">
                                 <label for="regEmail" class="form-label">Email address</label>
-                                <input type="email" class="form-control" id="regEmail" name="email"
+                                <input type="email" class="form-control ${not empty validationErrors.email ? 'is-invalid' : ''}"
+                                       id="regEmail" name="email"
                                        placeholder="you@example.com" autocomplete="email"
+                                       value='<c:out value="${param.email}" />'
                                        data-validate="required|email" data-error-email="Enter a valid email address.">
-                                <div class="invalid-feedback" id="regEmail-feedback"></div>
+                                <div class="invalid-feedback" id="regEmail-feedback">
+                                    <c:out value="${validationErrors.email}" />
+                                </div>
                             </div>
 
                             <div class="col-md-6">
                                 <label for="regPhone" class="form-label">Phone number</label>
-                                <input type="tel" class="form-control" id="regPhone" name="phone"
-                                       placeholder="+91 98765 43210" data-validate="required|phone"
-                                       data-error-phone="Enter a valid phone number.">
-                                <div class="invalid-feedback" id="regPhone-feedback"></div>
+                                <input type="tel" class="form-control ${not empty validationErrors.phone ? 'is-invalid' : ''}"
+                                       id="regPhone" name="phone"
+                                       placeholder="+91 98765 43210" autocomplete="tel"
+                                       value='<c:out value="${param.phone}" />'
+                                       data-validate="required|phone" data-error-phone="Enter a valid phone number.">
+                                <div class="invalid-feedback" id="regPhone-feedback">
+                                    <c:out value="${validationErrors.phone}" />
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="regAddress" class="form-label">Address</label>
+                                <input type="text" class="form-control ${not empty validationErrors.address ? 'is-invalid' : ''}"
+                                       id="regAddress" name="address"
+                                       placeholder="Street, city, PIN code" autocomplete="street-address"
+                                       value='<c:out value="${param.address}" />'
+                                       data-validate="required" data-error-required="Address is required.">
+                                <div class="invalid-feedback" id="regAddress-feedback">
+                                    <c:out value="${validationErrors.address}" />
+                                </div>
                             </div>
 
                             <div class="col-md-6">
                                 <label for="regPassword" class="form-label">Password</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                                    <input type="password" class="form-control" id="regPassword" name="password"
+                                    <input type="password" class="form-control ${not empty validationErrors.password ? 'is-invalid' : ''}"
+                                           id="regPassword" name="password"
                                            placeholder="At least 6 characters" autocomplete="new-password"
                                            data-validate="required|minLength:6"
                                            data-error-minLength="Password must be at least 6 characters.">
                                 </div>
-                                <div class="invalid-feedback" id="regPassword-feedback"></div>
+                                <div class="invalid-feedback" id="regPassword-feedback">
+                                    <c:out value="${validationErrors.password}" />
+                                </div>
                             </div>
 
                             <div class="col-md-6">
                                 <label for="regConfirm" class="form-label">Confirm password</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                                    <input type="password" class="form-control" id="regConfirm" name="confirmPassword"
+                                    <input type="password" class="form-control ${not empty validationErrors.confirmPassword ? 'is-invalid' : ''}"
+                                           id="regConfirm" name="confirmPassword"
                                            placeholder="Re-enter password" autocomplete="new-password"
                                            data-validate="required|match:regPassword"
                                            data-error-match="Passwords do not match.">
                                 </div>
-                                <div class="invalid-feedback" id="regConfirm-feedback"></div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label for="regAddress" class="form-label">Shipping address <span class="text-muted fw-normal">(optional)</span></label>
-                                <input type="text" class="form-control" id="regAddress" name="address"
-                                       placeholder="Street, city, PIN code">
-                                <div class="invalid-feedback" id="regAddress-feedback"></div>
+                                <div class="invalid-feedback" id="regConfirm-feedback">
+                                    <c:out value="${validationErrors.confirmPassword}" />
+                                </div>
                             </div>
 
                             <div class="col-12">

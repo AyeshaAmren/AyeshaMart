@@ -22,3 +22,6 @@ Desktop.ini
 
 # Local Tomcat data
 *.tmp
+
+# Excel data files (stored outside webapp by default)
+data/
