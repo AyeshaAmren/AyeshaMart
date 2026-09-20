@@ -1,13 +1,18 @@
 package com.ayeshamart.config;
 
+import com.ayeshamart.dao.ProductDAO;
 import com.ayeshamart.dao.UserDAO;
+import com.ayeshamart.model.Product;
 import com.ayeshamart.model.User;
 import com.ayeshamart.service.CatalogSeeder;
 import com.ayeshamart.service.CategoryService;
 import com.ayeshamart.util.PasswordUtil;
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
+import java.io.File;
+import java.util.List;
 
 /**
  * Application startup tasks for Ayesha Mart.
@@ -29,6 +34,7 @@ public class AppInitializer implements ServletContextListener {
         try {
             new CategoryService().seedDefaults();
             new CatalogSeeder().seed();
+            rePointProductImages(sce.getServletContext());
 
             UserDAO userDao = new UserDAO();
             if (hasAdmin(userDao)) {
@@ -54,6 +60,47 @@ public class AppInitializer implements ServletContextListener {
             sce.getServletContext().log("Ayesha Mart: seeded default admin account '" + email + "'.");
         } catch (RuntimeException e) {
             sce.getServletContext().log("Ayesha Mart: could not seed the default admin account.", e);
+        }
+    }
+
+    private void rePointProductImages(ServletContext ctx) {
+        String imagesDir = ctx.getRealPath("/images/products");
+        if (imagesDir == null) {
+            return;
+        }
+        File dir = new File(imagesDir);
+        if (!dir.isDirectory()) {
+            return;
+        }
+        ProductDAO dao = new ProductDAO();
+        int moved = 0;
+        for (Product product : dao.findAll()) {
+            String id = product.getProductId();
+            if (id == null) {
+                continue;
+            }
+            String current = product.getImage() == null ? "" : product.getImage().trim();
+            String localPath = "images/products/" + id + ".svg";
+            if (localPath.equals(current)) {
+                continue;
+            }
+            boolean isLegacyMarker = current.isEmpty()
+                    || current.equals("product-image?id=" + id)
+                    || current.startsWith("product-image?id=");
+            if (!isLegacyMarker) {
+                continue;
+            }
+            File imageFile = new File(dir, id + ".svg");
+            if (!imageFile.isFile()) {
+                continue;
+            }
+            product.setImage(localPath);
+            if (dao.update(product)) {
+                moved++;
+            }
+        }
+        if (moved > 0) {
+            ctx.log("Ayesha Mart: re-pointed " + moved + " product image(s) to local SVGs.");
         }
     }
 

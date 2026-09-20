@@ -1,0 +1,11 @@
+# Ayesha Mart - Render Blueprint (one-click deploy if the repo is added)
+services:
+  - type: web
+    name: ayesha-mart
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /
+    envVars:
+      - key: AYESHA_MART_DATA_DIR
+        value: /opt/ayesha-mart-data

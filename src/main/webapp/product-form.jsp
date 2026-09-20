@@ -43,7 +43,7 @@
                         </div>
                     </c:if>
 
-                    <form action="${ctx}/seller/product" method="post" id="productForm" data-validate-form novalidate>
+                    <form action="${ctx}/seller/product" method="post" enctype="multipart/form-data" id="productForm" data-validate-form novalidate>
                         <c:if test="${isEdit}">
                             <input type="hidden" name="productId" value="<c:out value='${product.productId}' />">
                         </c:if>
@@ -131,7 +131,7 @@
                             <div class="col-md-6">
                                 <label for="productImage" class="form-label">Image URL <span class="text-muted fw-normal">(optional)</span></label>
                                 <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-image"></i></span>
+                                    <span class="input-group-text"><i class="bi bi-link-45deg"></i></span>
                                     <input type="text" class="form-control ${not empty validationErrors.image ? 'is-invalid' : ''}"
                                            id="productImage" name="image" placeholder="https://example.com/image.jpg"
                                            value='<c:out value="${product.image}" />'>
@@ -140,6 +140,33 @@
                                     <c:out value="${validationErrors.image}" />
                                 </div>
                                 <div class="form-text">Paste a link to a product image (png, jpg, gif, webp or svg).</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="productPhoto" class="form-label">Product photo <span class="text-muted fw-normal">(optional)</span></label>
+                                <input type="file" class="form-control" id="productPhoto" name="productImage"
+                                       accept="image/png,image/jpeg,image/gif,image/webp">
+                                <c:if test="${isEdit && not empty product.image}">
+                                    <div class="d-flex align-items-center gap-3 mt-2">
+                                        <c:choose>
+                                            <c:when test="${product.image.startsWith('http')}">
+                                                <img src="<c:out value='${product.image}' />" width="64" height="48"
+                                                     class="rounded border object-fit-cover" alt="Current photo"
+                                                     onerror="this.onerror=null;this.src='${ctx}/images/placeholder.svg'">
+                                            </c:when>
+                                            <c:otherwise>
+                                                <img src="${ctx}/<c:out value='${product.image}' />" width="64" height="48"
+                                                     class="rounded border object-fit-cover" alt="Current photo"
+                                                     onerror="this.onerror=null;this.src='${ctx}/images/placeholder.svg'">
+                                            </c:otherwise>
+                                        </c:choose>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="removeImage" name="removeImage" value="true">
+                                            <label class="form-check-label" for="removeImage">Remove current photo</label>
+                                        </div>
+                                    </div>
+                                </c:if>
+                                <div class="form-text mt-2">Upload a JPG, PNG, GIF or WebP photo. A photo here overrides the URL above.</div>
                             </div>
 
                             <div class="col-12">

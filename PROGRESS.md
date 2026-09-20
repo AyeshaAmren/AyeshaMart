@@ -122,3 +122,12 @@ Final Phase 7 pass: phase6 54/54, phase5 49/49, phase4 41/41, phase3 12/12.
 - Session cookie is `http-only` but not `secure`/`SameSite`, so deployments must use HTTPS.
 - Legacy sibling folder `Ayesha capstone\` is a copy; only `src\` (active project root) is
   edited.
+
+## Phase 9: Cloud deployment (Docker + Render)
+- Deployment is containerized: Dockerfile (multi-stage Maven -> Tomcat 11 / JDK 17),
+  served at context root (ROOT.war) so the public URL is the bare site path.
+- ender.yaml Blueprint for one-click Render deploy (free plan).
+- Data dir set to /opt/ayesha-mart-data via ENV AYESHA_MART_DATA_DIR (ephemeral on free
+  tier: fresh 291-product seed on each cold start; registrations are lost on restart).
+- Product images are the 291 generated SVGs (webapp/images/products/, inside the WAR);
+  the random-photo bundle (images/seeded) was removed.

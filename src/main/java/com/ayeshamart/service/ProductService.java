@@ -24,7 +24,7 @@ public class ProductService {
     private static final double PRICE_MAX = 10_000_000d;
     private static final int STOCK_MAX = 1_000_000;
     private static final String IMAGE_PATTERN =
-            "^(https?://[^\\s]+\\.(png|jpe?g|gif|webp|svg|avif)(\\?[^\\s]*)?|/?[A-Za-z0-9_\\-./]+\\.(png|jpe?g|gif|webp|svg|avif))$";
+            "^(https?://[^\\s]+\\.(png|jpe?g|gif|webp|svg|avif)(\\?[^\\s]*)?|/?[A-Za-z0-9_\\-./]+\\.(png|jpe?g|gif|webp|svg|avif)|product-image\\?id=[A-Za-z0-9_-]+)$";
 
     private final ProductDAO productDao = new ProductDAO();
     private final CategoryDAO categoryDao = new CategoryDAO();
@@ -163,6 +163,16 @@ public class ProductService {
             throw new ProductAccessException("You can only manage products that belong to you.");
         }
         return existing;
+    }
+
+    /**
+     * Assigns a picture reference (e.g. the uploaded-photo servlet path) to a
+     * seller's own product. Ownership is verified just like every other mutation.
+     */
+    public void assignImage(String productId, String image, String sellerId) throws ProductAccessException {
+        Product owned = getOwned(productId, sellerId);
+        owned.setImage(image == null ? "" : image.trim());
+        productDao.update(owned);
     }
 
     /* ---------------- Validation ---------------- */

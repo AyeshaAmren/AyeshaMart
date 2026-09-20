@@ -2,24 +2,33 @@ package com.ayeshamart.controller;
 
 import com.ayeshamart.dao.ProductDAO;
 import com.ayeshamart.model.Product;
+import com.ayeshamart.util.ProductImageStore;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Generates a branded SVG image tile for any catalog product, so every product has a
- * real, unique image offline (no external image service is needed).
+ * Serves the picture for any catalog product, working fully offline:
+ * 1. an uploaded photo saved under &lt;data&gt;/images/products/&lt;id&gt;.&lt;ext&gt; by a
+ *    seller, else
+ * 2. a generated branded SVG poster (webapp/images/products/&lt;id&gt;.svg) built from
+ *    that product's own name, category and subcategory.
  *
- * GET /product-image?id=P0001 -> image/svg+xml branded with the product's category,
- * sub-category and name. A missing/unknown product id returns 404 so the page-level
- * "no image" fallback kicks in.
+ * The "product-image?id=..." reference only applies to products whose picture is a
+ * seller upload. Seeded products point straight at their local SVG file, which this
+ * servlet never needs to serve.
+ *
+ * GET /product-image?id=P0001 -> the photo or SVG above. A missing/unknown product id
+ * returns 404 so the page-level "no image" fallback kicks in.
  */
 @WebServlet("/product-image")
 public class ProductImageServlet extends HttpServlet {
@@ -36,16 +45,23 @@ public class ProductImageServlet extends HttpServlet {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
+        id = id.trim();
+
+        File uploaded = ProductImageStore.findFile(id);
+        if (uploaded != null) {
+            streamFile(response, uploaded);
+            return;
+        }
 
         String svg = null;
         String cached = tileCache.get(id);
         if (cached != null) {
             svg = cached;
         } else {
-            Product product = productDao.findById(id.trim());
+            Product product = productDao.findById(id);
             if (product != null) {
                 svg = render(product);
-                tileCache.put(id.trim(), svg);
+                tileCache.put(id, svg);
             }
         }
 
@@ -57,6 +73,26 @@ public class ProductImageServlet extends HttpServlet {
         response.setContentType("image/svg+xml; charset=UTF-8");
         response.setHeader("Cache-Control", "public, max-age=86400");
         response.getWriter().write(svg);
+    }
+
+    private void streamFile(HttpServletResponse response, File file) throws IOException {
+        response.setContentType(typeOf(file));
+        response.setHeader("Cache-Control", "public, max-age=86400");
+        Files.copy(file.toPath(), response.getOutputStream());
+    }
+
+    private String typeOf(File file) {
+        String name = file.getName().toLowerCase();
+        if (name.endsWith(".png")) {
+            return "image/png";
+        }
+        if (name.endsWith(".gif")) {
+            return "image/gif";
+        }
+        if (name.endsWith(".webp")) {
+            return "image/webp";
+        }
+        return "image/jpeg";
     }
 
     private String render(Product product) {

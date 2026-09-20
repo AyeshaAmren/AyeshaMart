@@ -303,13 +303,14 @@ public class CatalogSeeder {
     }
 
     /**
-     * Every seeded product without a picture gets a local branded SVG tile served by
-     * the /product-image servlet, so the whole catalogue shows images offline.
+     * Every seeded product without a picture is pointed at its own stable, locally
+     * generated SVG (webapp/images/products/<id>.svg), designed from that product's
+     * name, category and subcategory. No external image service is needed.
      */
     private void assignBrandedImages() {
         for (Product product : productDao.findAll()) {
             if (product.getImage() == null || product.getImage().trim().isEmpty()) {
-                product.setImage("product-image?id=" + product.getProductId());
+                product.setImage("images/products/" + product.getProductId() + ".svg");
                 productDao.update(product);
             }
         }

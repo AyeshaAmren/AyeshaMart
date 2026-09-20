@@ -1,0 +1,22 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400" role="img" aria-label="Women's Floral Summer Dress">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#F472B6"/>
+      <stop offset="1" stop-color="#BE185D"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#g)"/>
+  <circle cx="540" cy="40" r="170" fill="#FFFFFF" opacity="0.10"/>
+  <circle cx="40" cy="380" r="140" fill="#FFFFFF" opacity="0.10"/>
+  <g transform="translate(105,60) scale(6.2)" fill="none" stroke="#FFFFFF" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round" opacity="0.10">M14 9 L24 4 L34 9 L41 15 L34 21 L34 44 L14 44 L14 21 L7 15 Z</g>
+  <rect x="40" y="130" width="520" height="150" rx="20" fill="#000000" opacity="0.10"/>
+  <text x="32" y="44" font-family="'Segoe UI', Arial, sans-serif" font-size="19" font-weight="600" fill="#FFFFFF" opacity="0.9">AYESHA MART</text>
+  <g transform="translate(504,50) scale(0.66)" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" opacity="0.9">
+    <circle cx="24" cy="24" r="24" fill="#FFFFFF" opacity="0.16" stroke="none"/>
+    M14 9 L24 4 L34 9 L41 15 L34 21 L34 44 L14 44 L14 21 L7 15 Z
+  </g>
+  <text x="300" y="185" font-family="'Segoe UI', Arial, sans-serif" font-size="44" font-weight="700" fill="#FFFFFF" text-anchor="middle">Women's Floral Summer</text><text x="300" y="241" font-family="'Segoe UI', Arial, sans-serif" font-size="44" font-weight="700" fill="#FFFFFF" text-anchor="middle">Dress</text>
+  <rect x="250" y="336" width="99.5" height="32" rx="16" fill="#FFFFFF" fill-opacity="0.18"/>
+  <text x="300" y="357" font-family="'Segoe UI', Arial, sans-serif" font-size="16" font-weight="500" fill="#FFFFFF" text-anchor="middle">Women</text>
+  <text x="568" y="386" font-family="'Segoe UI', Arial, sans-serif" font-size="13" fill="#FFFFFF" opacity="0.7" text-anchor="end">P0008</text>
+</svg>

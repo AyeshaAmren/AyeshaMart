@@ -4,6 +4,7 @@ import com.ayeshamart.model.SessionUser;
 import com.ayeshamart.model.User;
 import com.ayeshamart.service.ProductAccessException;
 import com.ayeshamart.service.ProductService;
+import com.ayeshamart.util.ProductImageStore;
 import com.ayeshamart.util.SessionUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -33,6 +34,7 @@ public class ProductDeleteServlet extends HttpServlet {
 
         try {
             productService.delete(id, user.getUserId());
+            ProductImageStore.delete(id);
             response.sendRedirect(request.getContextPath() + "/seller/products?msg=deleted");
         } catch (ProductAccessException e) {
             response.sendRedirect(request.getContextPath() + "/seller/products?error=forbidden");
