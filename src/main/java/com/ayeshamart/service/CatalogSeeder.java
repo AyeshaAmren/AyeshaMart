@@ -24,6 +24,118 @@ public class CatalogSeeder {
     private static final String DEMO_SELLER_EMAIL = "seller@ayeshamart.com";
     private static final String DEMO_SELLER_PASSWORD = "Seller@123";
 
+    // Popular book titles get a real book-cover photo (webapp/images/products/)
+    // instead of the generated branded SVG tile. Titles not listed keep the SVG.
+    private static final java.util.Map<String, String> BOOK_COVERS = java.util.Map.ofEntries(
+            // Fiction
+            java.util.Map.entry("The Great Gatsby", "images/products/cover-gatsby.jpg"),
+            java.util.Map.entry("To Kill a Mockingbird", "images/products/cover-mockingbird.jpg"),
+            java.util.Map.entry("One Hundred Years of Solitude", "images/products/cover-solitude.jpg"),
+            java.util.Map.entry("The Alchemist", "images/products/cover-alchemist.jpg"),
+            java.util.Map.entry("The Catcher in the Rye", "images/products/cover-catcher.jpg"),
+            java.util.Map.entry("Pride and Prejudice", "images/products/cover-pride.jpg"),
+            java.util.Map.entry("The Book Thief", "images/products/cover-bookthief.jpg"),
+            java.util.Map.entry("The Kite Runner", "images/products/cover-kiterunner.jpg"),
+            java.util.Map.entry("Life of Pi", "images/products/cover-lifeofpi.jpg"),
+            java.util.Map.entry("The Namesake", "images/products/cover-namesake.jpg"),
+            // Mystery & Thrillers
+            java.util.Map.entry("The Da Vinci Code", "images/products/cover-davinci.jpg"),
+            java.util.Map.entry("Gone Girl", "images/products/cover-gonegirl.jpg"),
+            java.util.Map.entry("The Girl with the Dragon Tattoo", "images/products/cover-dragontattoo.jpg"),
+            java.util.Map.entry("And Then There Were None", "images/products/cover-thenonewere.jpg"),
+            java.util.Map.entry("The Silent Patient", "images/products/cover-silentpatient.jpg"),
+            java.util.Map.entry("The Hound of the Baskervilles", "images/products/cover-baskervilles.jpg"),
+            java.util.Map.entry("The Girl on the Train", "images/products/cover-girlontrain.jpg"),
+            java.util.Map.entry("The Woman in the Window", "images/products/cover-womanwindow.jpg"),
+            java.util.Map.entry("Verity", "images/products/cover-verity.jpg"),
+            java.util.Map.entry("The Bourne Identity", "images/products/cover-bourne.jpg"),
+            // Romance
+            java.util.Map.entry("Me Before You", "images/products/cover-mebeforeyou.jpg"),
+            java.util.Map.entry("The Notebook", "images/products/cover-notebook.jpg"),
+            java.util.Map.entry("The Fault in Our Stars", "images/products/cover-faultstars.jpg"),
+            java.util.Map.entry("Twilight", "images/products/cover-twilight.jpg"),
+            java.util.Map.entry("Eleanor and Park", "images/products/cover-eleanor.jpg"),
+            java.util.Map.entry("Outlander", "images/products/cover-outlander.jpg"),
+            java.util.Map.entry("It Ends with Us", "images/products/cover-itsendswithus.jpg"),
+            java.util.Map.entry("Normal People", "images/products/cover-normalpeople.jpg"),
+            java.util.Map.entry("The Rosie Project", "images/products/cover-rosie.jpg"),
+            java.util.Map.entry("P.S. I Love You", "images/products/cover-psiloveyou.jpg"),
+            // Fantasy & Sci-Fi
+            java.util.Map.entry("Harry Potter and the Philosopher's Stone", "images/products/cover-harrypotter.jpg"),
+            java.util.Map.entry("The Hobbit", "images/products/cover-hobbit.jpg"),
+            java.util.Map.entry("Dune", "images/products/cover-dune.jpg"),
+            java.util.Map.entry("A Game of Thrones", "images/products/cover-gamethrones.jpg"),
+            java.util.Map.entry("The Name of the Wind", "images/products/cover-namewind.jpg"),
+            java.util.Map.entry("Neuromancer", "images/products/cover-neuromancer.jpg"),
+            java.util.Map.entry("Ender's Game", "images/products/cover-endersgame.jpg"),
+            java.util.Map.entry("Foundation", "images/products/cover-foundation.jpg"),
+            java.util.Map.entry("The Martian", "images/products/cover-martian.jpg"),
+            java.util.Map.entry("Snow Crash", "images/products/cover-snowcrash.jpg"),
+            // Non-Fiction
+            java.util.Map.entry("Sapiens: A Brief History of Humankind", "images/products/cover-sapiens.jpg"),
+            java.util.Map.entry("Educated", "images/products/cover-educated.jpg"),
+            java.util.Map.entry("Atomic Habits", "images/products/cover-atomic.jpg"),
+            java.util.Map.entry("Thinking, Fast and Slow", "images/products/cover-thinking.jpg"),
+            java.util.Map.entry("A Brief History of Time", "images/products/cover-timebrief.jpg"),
+            java.util.Map.entry("Freakonomics", "images/products/cover-freakonomics.jpg"),
+            java.util.Map.entry("Outliers", "images/products/cover-outliers.jpg"),
+            java.util.Map.entry("Into the Wild", "images/products/cover-intothewild.jpg"),
+            java.util.Map.entry("Cosmos", "images/products/cover-cosmos.jpg"),
+            java.util.Map.entry("The Selfish Gene", "images/products/cover-selfishgene.jpg"),
+            // Self-Help
+            java.util.Map.entry("The 7 Habits of Highly Effective People", "images/products/cover-7habits.jpg"),
+            java.util.Map.entry("How to Win Friends and Influence People", "images/products/cover-winfriends.jpg"),
+            java.util.Map.entry("Think and Grow Rich", "images/products/cover-thinkrich.jpg"),
+            java.util.Map.entry("The Subtle Art of Not Giving a F*ck", "images/products/cover-subtleart.jpg"),
+            java.util.Map.entry("Deep Work", "images/products/cover-deepwork.jpg"),
+            java.util.Map.entry("The Power of Now", "images/products/cover-powernow.jpg"),
+            java.util.Map.entry("Ikigai: The Japanese Secret to a Long and Happy Life", "images/products/cover-ikigai.jpg"),
+            java.util.Map.entry("Rich Dad Poor Dad", "images/products/cover-richdad.jpg"),
+            java.util.Map.entry("The Psychology of Money", "images/products/cover-psychmoney.jpg"),
+            java.util.Map.entry("Mindset: The New Psychology of Success", "images/products/cover-mindset.jpg"),
+            // Biographies & Memoirs
+            java.util.Map.entry("Wings of Fire", "images/products/cover-wings.jpg"),
+            java.util.Map.entry("The Story of My Experiments with Truth", "images/products/cover-gandhi.jpg"),
+            java.util.Map.entry("Steve Jobs", "images/products/cover-stevejobs.jpg"),
+            java.util.Map.entry("Einstein: His Life and Universe", "images/products/cover-einstein.jpg"),
+            java.util.Map.entry("I Am Malala", "images/products/cover-malala.jpg"),
+            java.util.Map.entry("Born a Crime", "images/products/cover-borncrime.jpg"),
+            java.util.Map.entry("The Glass Castle", "images/products/cover-glasscastle.jpg"),
+            java.util.Map.entry("When Breath Becomes Air", "images/products/cover-breathair.jpg"),
+            java.util.Map.entry("Man's Search for Meaning", "images/products/cover-searchmeaning.jpg"),
+            java.util.Map.entry("Playing It My Way", "images/products/cover-playingmyway.jpg"),
+            // Children's Books
+            java.util.Map.entry("Charlie and the Chocolate Factory", "images/products/cover-charlie.jpg"),
+            java.util.Map.entry("Matilda", "images/products/cover-matilda.jpg"),
+            java.util.Map.entry("Charlotte's Web", "images/products/cover-charlottesweb.jpg"),
+            java.util.Map.entry("The Very Hungry Caterpillar", "images/products/cover-caterpillar.jpg"),
+            java.util.Map.entry("Winnie-the-Pooh", "images/products/cover-pooh.jpg"),
+            java.util.Map.entry("Peter Pan", "images/products/cover-peterpan.jpg"),
+            java.util.Map.entry("Alice's Adventures in Wonderland", "images/products/cover-alice.jpg"),
+            java.util.Map.entry("The Jungle Book", "images/products/cover-junglebook.jpg"),
+            java.util.Map.entry("The Little Prince", "images/products/cover-littleprince.jpg"),
+            java.util.Map.entry("Green Eggs and Ham", "images/products/cover-greeneggs.jpg"),
+            // Education & Study Guides
+            java.util.Map.entry("Word Power Made Easy", "images/products/cover-wordpower.jpg"),
+            java.util.Map.entry("High School English Grammar and Composition", "images/products/cover-wrenmartin.jpg"),
+            java.util.Map.entry("Indian Polity", "images/products/cover-indianpolity.jpg"),
+            java.util.Map.entry("Indian Economy", "images/products/cover-indianeconomy.jpg"),
+            java.util.Map.entry("Quantitative Aptitude for Competitive Examinations", "images/products/cover-quant.jpg"),
+            java.util.Map.entry("Organic Chemistry", "images/products/cover-organicchem.jpg"),
+            java.util.Map.entry("Oxford Student Atlas for India", "images/products/cover-oxfordatlas.jpg"),
+            java.util.Map.entry("A Modern Approach to Verbal and Non-Verbal Reasoning", "images/products/cover-verbalreason.jpg"),
+            // History & Politics
+            java.util.Map.entry("India: A History", "images/products/cover-indiahistory.jpg"),
+            java.util.Map.entry("The Discovery of India", "images/products/cover-discoveryindia.jpg"),
+            java.util.Map.entry("Why Nations Fail", "images/products/cover-whynations.jpg"),
+            java.util.Map.entry("The Silk Roads", "images/products/cover-silkroads.jpg"),
+            java.util.Map.entry("1776", "images/products/cover-1776.jpg"),
+            java.util.Map.entry("The Guns of August", "images/products/cover-gunsaugust.jpg"),
+            java.util.Map.entry("The Rise and Fall of the Third Reich", "images/products/cover-thirdreich.jpg"),
+            java.util.Map.entry("The Wonder That Was India", "images/products/cover-wonderindia.jpg"),
+            java.util.Map.entry("Freedom at Midnight", "images/products/cover-freedommidnight.jpg"),
+            java.util.Map.entry("21 Lessons for the 21st Century", "images/products/cover-21lessons.jpg"));
+
     // {title, author, books subcategory}
     private static final String[][] BOOKS = {
             // Fiction
@@ -303,6 +415,36 @@ public class CatalogSeeder {
     }
 
     /**
+     * Upgrades any already-seeded book that still points at its generic branded SVG
+     * tile to the matching real book-cover photo, when one exists. Safe to run on
+     * every startup: only the SVG default for a known book title is replaced, so
+     * seller uploads and unrelated images are never touched.
+     */
+    public void applyBookCovers() {
+        int updated = 0;
+        for (Product product : productDao.findAll()) {
+            String generated = "images/products/" + product.getProductId() + ".svg";
+            String cover = BOOK_COVERS.get(product.getName());
+            if (cover == null) {
+                continue;
+            }
+            String current = product.getImage() == null ? "" : product.getImage().trim();
+            boolean isSvgDefault = current.isEmpty() || current.equals(generated)
+                    || current.startsWith("images/products/");
+            if (!isSvgDefault) {
+                continue;
+            }
+            product.setImage(cover);
+            if (productDao.update(product)) {
+                updated++;
+            }
+        }
+        if (updated > 0) {
+            System.out.println("Ayesha Mart: applied " + updated + " real book-cover image(s).");
+        }
+    }
+
+    /**
      * Every seeded product without a picture is pointed at its own stable, locally
      * generated SVG (webapp/images/products/<id>.svg), designed from that product's
      * name, category and subcategory. No external image service is needed.
@@ -310,7 +452,9 @@ public class CatalogSeeder {
     private void assignBrandedImages() {
         for (Product product : productDao.findAll()) {
             if (product.getImage() == null || product.getImage().trim().isEmpty()) {
-                product.setImage("images/products/" + product.getProductId() + ".svg");
+                String cover = BOOK_COVERS.get(product.getName());
+                product.setImage(cover != null ? cover
+                        : "images/products/" + product.getProductId() + ".svg");
                 productDao.update(product);
             }
         }

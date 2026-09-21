@@ -126,8 +126,28 @@ Final Phase 7 pass: phase6 54/54, phase5 49/49, phase4 41/41, phase3 12/12.
 ## Phase 9: Cloud deployment (Docker + Render)
 - Deployment is containerized: Dockerfile (multi-stage Maven -> Tomcat 11 / JDK 17),
   served at context root (ROOT.war) so the public URL is the bare site path.
-- ender.yaml Blueprint for one-click Render deploy (free plan).
+- `render.yaml` Blueprint for one-click Render deploy (free plan).
 - Data dir set to /opt/ayesha-mart-data via ENV AYESHA_MART_DATA_DIR (ephemeral on free
   tier: fresh 291-product seed on each cold start; registrations are lost on restart).
 - Product images are the 291 generated SVGs (webapp/images/products/, inside the WAR);
   the random-photo bundle (images/seeded) was removed.
+- KNOWN ISSUE (pending, 20-Sep-2026): the live deploy at https://ayesha-mart.onrender.com/
+  returns a persistent 503 (not a normal free-tier cold start). The container is likely
+  crash-looping / failing the `/` health check. Phase 9 was only deployment PREP and was
+  never boot-tested in a container. TODO when user is ready: build `docker build` locally,
+  run the image, reproduce the boot failure, fix it, redeploy, and log in Render console.
+  Does NOT affect the local app or the unrelated local `jkmart_backend` on port 8080.
+- Book-upgrade pass (21-Sep-2026): 98 real book-cover photos (webapp/images/products/
+  cover-*.jpg, downloaded from Open Library/Google Books, offline in the WAR) replace the
+  branded SVG tiles for ~10 popular titles in each of the 10 book subcategories (Fiction,
+  Mystery & Thrillers, Romance, Fantasy & Sci-Fi, Non-Fiction, Self-Help, Biographies &
+  Memoirs, Children's, Education & Study Guides, History & Politics). `CatalogSeeder`
+  gained `BOOK_COVERS` (title -> cover) used at fresh seed, plus `applyBookCovers()`, a
+  safe startup upgrade that only re-points a known book that still shows its generated
+  SVG (never seller uploads / other images) so existing data dirs benefit without a
+  re-seed. Wired into `AppInitializer` right after `rePointProductImages`. 2 NCERT
+  textbooks keep the SVG tile (no public cover found).
+
+## Roadmap
+- Phase 6 (checkout/orders/payments/delivery/reviews) and all later work done and
+  committed; repository history continues through Phase 9 prep + the book-cover pass.

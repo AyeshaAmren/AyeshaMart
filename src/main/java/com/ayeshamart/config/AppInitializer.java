@@ -35,6 +35,7 @@ public class AppInitializer implements ServletContextListener {
             new CategoryService().seedDefaults();
             new CatalogSeeder().seed();
             rePointProductImages(sce.getServletContext());
+            new CatalogSeeder().applyBookCovers();
 
             UserDAO userDao = new UserDAO();
             if (hasAdmin(userDao)) {
